@@ -1,5 +1,11 @@
-const sdpConstraints = { optional: [{RtpDataChannels: true}]  };
-const peerConnection = new RTCPeerConnection(null);
+const sdpConstraints = { optional: [{RtpDataChannels: true}] };
+const configuration = { iceServers: [{
+  urls: [
+    "stun.l.google.com:19302"
+  ]}]
+};
+
+const peerConnection = new RTCPeerConnection(configuration);
 let dataChannel;
 
 peerConnection.onicecandidate = (e) => {

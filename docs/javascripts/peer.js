@@ -11,11 +11,14 @@ peerConnection.onicecandidate = (e) => {
   link.addEventListener('click', (e) => {
     e.preventDefault();
     e.stopPropagation();
-    navigator.share({
-      title: link.textContent,
-      text: offer,
-    });
-    // navigator.clipboard.writeText(offer);
+    if (navigator.share) {
+      navigator.share({
+        title: link.textContent,
+        text: offer,
+      });
+    } else {
+      navigator.clipboard.writeText(offer);
+    }
   })
   document.body.appendChild(link);
 }

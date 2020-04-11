@@ -1,0 +1,18 @@
+* {
+  margin: 0;
+  padding: 0;
+  touch-action: manipulation;
+  box-sizing: border-box;
+}
+
+.hidden {
+  display: none;
+}
+
+div {
+  max-width: 200px;
+  width: 200px;
+}
+div.response {
+  text-align: right;
+}

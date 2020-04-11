@@ -1,7 +1,7 @@
 const sdpConstraints = { optional: [{RtpDataChannels: true}] };
 const configuration = { iceServers: [{
   urls: [
-    "stun.l.google.com:19302"
+    "stun:stun.l.google.com:19302"
   ]}]
 };
 

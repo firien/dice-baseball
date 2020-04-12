@@ -1,4 +1,5 @@
 * {
+  font-family: -apple-system, Helvetica;
   margin: 0;
   padding: 0;
   touch-action: manipulation;
@@ -9,10 +10,25 @@
   display: none;
 }
 
-div {
-  max-width: 200px;
-  width: 200px;
+span.sent {
+  flex: 0 0 auto;
+  align-self: flex-end;
+  background-color: #14A5F5;
 }
-div.response {
-  text-align: right;
+
+span.response {
+  flex: 0 0 auto;
+  background-color: gray;
+}
+div#messages {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+div#messages span {
+  border-radius: 0.9em;
+  color: white;
+  margin: 0.3em;
+  padding: 0.3em 0.6em;
 }

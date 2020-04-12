@@ -3,7 +3,7 @@ import {noop, chunkParam, unChunkParam, logger} from './utils.js'
 const sdpConstraints = { optional: [{RtpDataChannels: true}] };
 const configuration = { iceServers: [{
   urls: [
-    "stun:stun.l.google.com:19302"
+    "stun:stun.l.google.com:19302",
   ]}]
 };
 
@@ -89,6 +89,8 @@ const createOfferSDP = async (e) => {
   let sessionDescription = await peerConnection.createOffer();
   peerConnection.setLocalDescription(sessionDescription);
   dataChannel.onopen = (e) => {
+    let button = document.querySelector('form#chat button');
+    button.disabled = false;
     logger('Connection Made');
   }
   dataChannel.onmessage = onMessage;
@@ -97,6 +99,8 @@ const createOfferSDP = async (e) => {
 peerConnection.ondatachannel = (e) => {
   dataChannel = e.channel;
   dataChannel.onopen = (e) => {
+    let button = document.querySelector('form#chat button');
+    button.disabled = false;
     logger('Connection Made');
   }
   dataChannel.onmessage = onMessage;
@@ -117,13 +121,15 @@ document.addEventListener('DOMContentLoaded', async (e) => {
   }
   let formChat = document.querySelector('form#chat');
   formChat.addEventListener('submit', async (e) => {
-    noop(e);
-    dataChannel.send(formChat.message.value);
-    let span = document.createElement('span');
-    span.classList.add('sent');
-    span.textContent = formChat.message.value;
-    let list = document.querySelector('#messages')
-    list.appendChild(span);
-    formChat.reset();
+    if (formChat.reportValidity()) {
+      noop(e);
+      dataChannel.send(formChat.message.value);
+      let span = document.createElement('span');
+      span.classList.add('sent');
+      span.textContent = formChat.message.value;
+      let list = document.querySelector('#messages')
+      list.appendChild(span);
+      formChat.reset();
+    }
   })
 })

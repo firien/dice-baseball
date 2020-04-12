@@ -1,3 +1,5 @@
+import {noop, chunkParam, unChunkParam, logger} from './utils.js'
+
 const sdpConstraints = { optional: [{RtpDataChannels: true}] };
 const configuration = { iceServers: [{
   urls: [
@@ -30,40 +32,6 @@ document.addEventListener('visibilitychange', (e) => {
   }, 500)
 })
 
-const noop = (e) => {
-  e.preventDefault();
-  e.stopPropagation();
-}
-
-const chunkParam = (url, param, offer) => {
-  const size = 250;
-  const chunks = Math.floor(offer.length / size);
-  for (let i=0; i<chunks; i++) {
-    let start = i*size;
-    let end = i === (chunks - 1) ? undefined : start + size;
-    let chunk = offer.slice(start, end);
-    url.searchParams.set(`${param}${i}`, chunk);
-  }
-}
-
-const unChunkParam = (name) => {
-  let url = new URL(window.location);
-  if (url.searchParams.has(`${name}0`)) {
-    const chunks = 5;
-    let string = '';
-    for (let i=0; i<chunks; i++) {
-      let param = `${name}${i}`;
-      if (url.searchParams.has(param)) {
-        string += url.searchParams.get(param);
-      } else {
-        break;
-      }
-    }
-    return string;
-  }
-  return null;
-}
-
 let dataChannel;
 
 peerConnection.onicecandidate = (e) => {
@@ -77,14 +45,19 @@ peerConnection.onicecandidate = (e) => {
   let link = document.createElement('a');
   link.href = url;
   link.textContent = 'Share Link';
-  link.addEventListener('click', (e) => {
+  link.addEventListener('click', async (e) => {
     noop(e);
     if (navigator.share) {
-      navigator.share({
-        title: link.textContent,
-        // text: 'offer',
-        url: url,
-      });
+      try {
+        await navigator.share({
+          title: link.textContent,
+          // text: 'offer',
+          url: url,
+        });
+        link.parentElement.removeChild(link);
+      } catch {
+        //nothing
+      }
     } else {
       navigator.clipboard.writeText(url);
     }
@@ -93,7 +66,7 @@ peerConnection.onicecandidate = (e) => {
 }
 peerConnection.oniceconnectionstatechange = (e) => {
   let state = peerConnection.iceConnectionState;
-  console.log(state);
+  logger(state);
   // if (state === 'connected') {
   //   // let span = document.createElement('span');
   //   // span.textContent = 'Connection Made';
@@ -116,9 +89,7 @@ const createOfferSDP = async (e) => {
   let sessionDescription = await peerConnection.createOffer();
   peerConnection.setLocalDescription(sessionDescription);
   dataChannel.onopen = (e) => {
-    let span = document.createElement('span');
-    span.textContent = 'Connection Made';
-    document.body.appendChild(span);
+    logger('Connection Made');
   }
   dataChannel.onmessage = onMessage;
 };
@@ -126,9 +97,7 @@ const createOfferSDP = async (e) => {
 peerConnection.ondatachannel = (e) => {
   dataChannel = e.channel;
   dataChannel.onopen = (e) => {
-    let span = document.createElement('span');
-    span.textContent = 'Connection Made';
-    document.body.appendChild(span);
+    logger('Connection Made');
   }
   dataChannel.onmessage = onMessage;
 }
@@ -146,27 +115,6 @@ document.addEventListener('DOMContentLoaded', async (e) => {
     let sessionDescription = await peerConnection.createAnswer(sdpConstraints)
     peerConnection.setLocalDescription(sessionDescription);
   }
-
-  // let joinButton = document.querySelector('#join');
-  // joinButton.addEventListener('click', (e) => {
-  //   let formAnswer = document.querySelector('form#answer');
-  //   formAnswer.classList.remove('hidden');
-  // })
-  // let formAnswer = document.querySelector('form#answer');
-  // formAnswer.addEventListener('submit', async (e) => {
-  //   noop(e);
-  //   let offer = new RTCSessionDescription(JSON.parse(atob(formAnswer.data.value)));
-  //   peerConnection.setRemoteDescription(offer);
-  //   let sessionDescription = await peerConnection.createAnswer(sdpConstraints)
-  //   peerConnection.setLocalDescription(sessionDescription);
-  // })
-
-  // let formResponse = document.querySelector('form#response');
-  // formResponse.addEventListener('submit', async (e) => {
-  //   noop(e);
-  //   let offer = new RTCSessionDescription(JSON.parse(atob(formResponse.data.value)));
-  //   peerConnection.setRemoteDescription(offer);
-  // })
   let formChat = document.querySelector('form#chat');
   formChat.addEventListener('submit', async (e) => {
     noop(e);

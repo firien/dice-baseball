@@ -6,25 +6,10 @@
     <meta name="Description" content="Password Generator">
     <meta name="theme-color" content="#901011">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <script>
-      const unChunkParam = (name) => {
-        let url = new URL(window.location);
-        if (url.searchParams.has(`${name}0`)) {
-          const chunks = 5;
-          let string = '';
-          for (let i=0; i<chunks; i++) {
-            let param = `${name}${i}`;
-            if (url.searchParams.has(param)) {
-              string += url.searchParams.get(param);
-            } else {
-              break;
-            }
-          }
-          return string;
-        }
-        return null;
-      }
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <script type="module">
+      import { unChunkParam } from './javascripts/utils.js'
+
       document.addEventListener('DOMContentLoaded', (e) => {
         let paramAnswer = unChunkParam('answer');
         if (paramAnswer) {
@@ -36,6 +21,6 @@
     <noscript>
       <div>Requires Javascript</div>
     </noscript>
-    <div>Close this page</div>
+    <div>Close this page, and return to Main page.</div>
   </body>
 </html>

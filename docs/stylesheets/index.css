@@ -13,12 +13,14 @@
 span.sent {
   flex: 0 0 auto;
   align-self: flex-end;
-  background-color: #14A5F5;
+  color: white;
+  background-color: rgb(45,156,252);
 }
 
 span.response {
   flex: 0 0 auto;
-  background-color: gray;
+  color: black;
+  background-color: rgb(233,233,235);
 }
 div#messages {
   display: flex;
@@ -28,7 +30,6 @@ div#messages {
 
 div#messages span {
   border-radius: 0.9em;
-  color: white;
   margin: 0.3em;
-  padding: 0.3em 0.6em;
+  padding: 0.4em 0.6em;
 }

@@ -7,17 +7,24 @@ const configuration = { iceServers: [{
 
 const peerConnection = new RTCPeerConnection(configuration);
 
+let storageOffer;
 window.addEventListener('storage', () => {
   if (peerConnection.remoteDescription == null) {
     let description = localStorage.getItem('answer');
     if (description) {
-      let offer = new RTCSessionDescription(JSON.parse(atob(description)));
-      peerConnection.setRemoteDescription(offer);
+      storageOffer = JSON.parse(atob(description));
       localStorage.removeItem('answer');
     }
   }
 });
 
+document.addEventListener('visibilitychange', (e) => {
+  if (storageOffer) {
+    let offer = new RTCSessionDescription(storageOffer);
+    peerConnection.setRemoteDescription(offer);
+    storageOffer = null;
+  }
+})
 
 const noop = (e) => {
   e.preventDefault();
@@ -29,7 +36,9 @@ peerConnection.onicecandidate = (e) => {
   if (e.candidate) return;
   let param = (peerConnection.remoteDescription == null) ? 'offer' : 'answer';
   let offer = btoa(JSON.stringify(peerConnection.localDescription));
-  let url = new URL(`${location.protocol}//${location.host}${location.pathname}`)
+  // iMessage does not like query params after a trailing `/`
+  let pathname = location.pathname.replace(/\/$/, '');
+  let url = new URL(`${location.protocol}//${location.host}${pathname}`)
   url.searchParams.set(param, offer);
   let link = document.createElement('a');
   link.href = url;
@@ -40,7 +49,7 @@ peerConnection.onicecandidate = (e) => {
       navigator.share({
         title: link.textContent,
         // text: 'offer',
-        url: url.toString(),
+        url: url,
       });
     } else {
       navigator.clipboard.writeText(url);

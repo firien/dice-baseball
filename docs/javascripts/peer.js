@@ -61,6 +61,10 @@ peerConnection.onicecandidate = (e) => {
     } else {
       navigator.clipboard.writeText(url);
     }
+    if (param === 'offer') {
+      let formAnswer = document.querySelector('form#answer');
+      formAnswer.classList.remove('hidden');
+    }
   })
   document.body.appendChild(link);
 }
@@ -111,7 +115,8 @@ document.addEventListener('DOMContentLoaded', async (e) => {
   button.addEventListener('click', createOfferSDP);
 
   // was it loaded with offer?
-  let paramOffer = unChunkParam('offer');
+  let url = new URL(window.location);
+  let paramOffer = unChunkParam(url, 'offer');
   if (paramOffer) {
     button.classList.add('hidden');
     let offer = new RTCSessionDescription(JSON.parse(atob(paramOffer)));
@@ -119,6 +124,15 @@ document.addEventListener('DOMContentLoaded', async (e) => {
     let sessionDescription = await peerConnection.createAnswer(sdpConstraints)
     peerConnection.setLocalDescription(sessionDescription);
   }
+  let formAnswer = document.querySelector('form#answer');
+  formAnswer.addEventListener('submit', async (e) => {
+    noop(e);
+    let url = new URL(formAnswer.data.value);
+    let paramAnswer = JSON.parse(atob(unChunkParam(url, 'answer')));
+    let offer = new RTCSessionDescription(paramAnswer);
+    peerConnection.setRemoteDescription(offer);
+    formAnswer.classList.add('hidden');
+  })
   let formChat = document.querySelector('form#chat');
   formChat.addEventListener('submit', async (e) => {
     if (formChat.reportValidity()) {

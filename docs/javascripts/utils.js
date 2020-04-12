@@ -14,8 +14,7 @@ export const chunkParam = (url, param, offer) => {
   }
 }
 
-export const unChunkParam = (name) => {
-  let url = new URL(window.location);
+export const unChunkParam = (url, name) => {
   if (url.searchParams.has(`${name}0`)) {
     const chunks = 5;
     let string = '';

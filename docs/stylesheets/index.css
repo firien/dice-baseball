@@ -58,3 +58,19 @@ button {
   border-radius: 0.3em;
   background-color: #eee;
 }
+
+form#answer {
+  width: 100vw;
+  max-width: 400px;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+form#answer * {
+  flex: 1 1 100%;
+}
+
+form#answer.hidden {
+  display: none;
+}
+

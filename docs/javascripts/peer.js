@@ -30,9 +30,9 @@ peerConnection.onicecandidate = (e) => {
   let param = (peerConnection.remoteDescription == null) ? 'offer' : 'answer';
   let offer = btoa(JSON.stringify(peerConnection.localDescription));
   let url = new URL(`${location.protocol}//${location.host}${location.pathname}`)
-  url.searchParams.set(param, offer)
+  url.searchParams.set(param, offer);
   let link = document.createElement('a');
-  link.href = '#';
+  link.href = url;
   link.textContent = 'Share Link';
   link.addEventListener('click', (e) => {
     noop(e);
@@ -50,12 +50,12 @@ peerConnection.onicecandidate = (e) => {
 }
 peerConnection.oniceconnectionstatechange = (e) => {
   let state = peerConnection.iceConnectionState;
-  // console.log(state);
-  if (state === 'connected') {
-    // let span = document.createElement('span');
-    // span.textContent = 'Connection Made';
-    // document.body.appendChild(span);
-  }
+  console.log(state);
+  // if (state === 'connected') {
+  //   // let span = document.createElement('span');
+  //   // span.textContent = 'Connection Made';
+  //   // document.body.appendChild(span);
+  // }
 };
 const onMessage = (e) => {
   let span = document.createElement('span');

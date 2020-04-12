@@ -19,11 +19,15 @@ window.addEventListener('storage', () => {
 });
 
 document.addEventListener('visibilitychange', (e) => {
-  if (storageOffer) {
-    let offer = new RTCSessionDescription(storageOffer);
-    peerConnection.setRemoteDescription(offer);
-    storageOffer = null;
-  }
+  // I have no idea how iOS executes storage events in background tabs
+  // do allow some time for this to happen
+  setTimeout(() => {
+    if (storageOffer) {
+      let offer = new RTCSessionDescription(storageOffer);
+      peerConnection.setRemoteDescription(offer);
+      storageOffer = null;
+    }
+  }, 500)
 })
 
 const noop = (e) => {
@@ -37,7 +41,7 @@ peerConnection.onicecandidate = (e) => {
   let param = (peerConnection.remoteDescription == null) ? 'offer' : 'answer';
   let offer = btoa(JSON.stringify(peerConnection.localDescription));
   // iMessage does not like query params after a trailing `/`
-  let pathname = location.pathname.replace(/\/$/, '');
+  let pathname = location.pathname + (param === 'offer' ? 'join.html' : 'answer.html')
   let url = new URL(`${location.protocol}//${location.host}${pathname}`)
   url.searchParams.set(param, offer);
   let link = document.createElement('a');
@@ -73,7 +77,9 @@ const onMessage = (e) => {
   let list = document.querySelector('#messages')
   list.appendChild(span);
 }
-const createOfferSDP = async () => {
+const createOfferSDP = async (e) => {
+  let button = e.target;
+  button.disabled = true;
   // let formResponse = document.querySelector('form#response');
   // formResponse.classList.remove('hidden');
   dataChannel = peerConnection.createDataChannel("chat");
@@ -110,8 +116,6 @@ document.addEventListener('DOMContentLoaded', async (e) => {
     peerConnection.setRemoteDescription(offer);
     let sessionDescription = await peerConnection.createAnswer(sdpConstraints)
     peerConnection.setLocalDescription(sessionDescription);
-  } else if (url.searchParams.has('answer')) {
-    localStorage.setItem('answer', url.searchParams.get('answer'));
   }
 
   // let joinButton = document.querySelector('#join');

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Dice Baseball</title>
+    <meta charset="UTF-8">
+    <meta name="Description" content="Password Generator">
+    <meta name="theme-color" content="#901011">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script>
+      /*
+      The whole point of this file is to get around iMessage not liking links
+      ending the trailing slash that include query params
+      */
+      document.addEventListener('DOMContentLoaded', (e) => {
+        let url = window.location.toString().replace('join.html', '');
+        window.location = url;
+      })
+    </script>
+  <body>
+    <noscript>
+      <div>Requires Javascript</div>
+    </noscript>
+  </body>
+</html>

@@ -36,7 +36,7 @@ peerConnection.onicecandidate = (e) => {
   link.textContent = 'Share Link';
   link.addEventListener('click', (e) => {
     noop(e);
-    if (navigator.shared) {
+    if (navigator.share) {
       navigator.share({
         title: link.textContent,
         // text: 'offer',

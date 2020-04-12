@@ -8,14 +8,27 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <script>
-      /*
-      The whole point of this file is to get around iMessage not liking links
-      ending the trailing slash that include query params
-      */
-      document.addEventListener('DOMContentLoaded', (e) => {
+      const unChunkParam = (name) => {
         let url = new URL(window.location);
-        if (url.searchParams.has('answer')) {
-          localStorage.setItem('answer', url.searchParams.get('answer'));
+        if (url.searchParams.has(`${name}0`)) {
+          const chunks = 5;
+          let string = '';
+          for (let i=0; i<chunks; i++) {
+            let param = `${name}${i}`;
+            if (url.searchParams.has(param)) {
+              string += url.searchParams.get(param);
+            } else {
+              break;
+            }
+          }
+          return string;
+        }
+        return null;
+      }
+      document.addEventListener('DOMContentLoaded', (e) => {
+        let paramAnswer = unChunkParam('answer');
+        if (paramAnswer) {
+          localStorage.setItem('answer', paramAnswer);
         }
       })
     </script>

@@ -1,4 +1,8 @@
-import {noop, chunkParam, unChunkParam, logger} from './utils.js'
+import {noop, chunkParam, unChunkParam, logger, empty} from './utils.js'
+// import {test, roll, test2} from './dice.js'
+import Game from './game.js';
+import Die from './die.js';
+import Team from './team.js';
 
 const sdpConstraints = { optional: [{RtpDataChannels: true}] };
 const configuration = { iceServers: [{
@@ -110,6 +114,16 @@ peerConnection.ondatachannel = (e) => {
   dataChannel.onmessage = onMessage;
 }
 
+const updateScoreboard = (game) => {
+  let homeRuns = document.querySelector('#home-runs');
+  let runs = game.homeTeam.players.reduce((sum, p) => sum += p.runs, 0);
+  homeRuns.textContent = runs;
+  let awayRuns = document.querySelector('#away-runs');
+  runs = game.awayTeam.players.reduce((sum, p) => sum += p.runs, 0);
+  awayRuns.textContent = runs;
+
+}
+
 document.addEventListener('DOMContentLoaded', async (e) => {
   let button = document.querySelector('#create');
   button.addEventListener('click', createOfferSDP);
@@ -145,5 +159,35 @@ document.addEventListener('DOMContentLoaded', async (e) => {
       list.appendChild(span);
       formChat.reset();
     }
+  })
+  // document.querySelector('#roll').addEventListener('input', (e) => {
+  //   let form = e.currentTarget;
+  //   // test(Number(form.n.value), Number(form.add.value));
+  //   test2()
+  // })
+  let game = new Game();
+  let roller = document.querySelector('button#roll')
+  let div = document.createElement('div');
+  div.id = 'roll-result'
+  roller.addEventListener('click', (e) => {
+    empty(div);
+    let roll = game.roll();
+    for (let number of roll) {
+      let text = String.fromCharCode(Die.faces[number]);
+      let span = document.createElement('span');
+      span.classList.add('die');
+      span.textContent = text;
+      div.appendChild(span);
+    }
+    document.body.appendChild(div);
+    game.bat(roll);
+    //update field
+    for (let base=1; base<=3; base++) {
+      let player = game.currentTeam.playerOn(base);
+      let rect = document.querySelector(`rect[data-base='${base}']`)
+      rect.classList.toggle('occupied', !!player);
+    }
+    //update scoreboard
+    updateScoreboard(game);
   })
 })

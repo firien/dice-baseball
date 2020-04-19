@@ -40,3 +40,9 @@ export const logger = (message) => {
     container.appendChild(div);
   }
 }
+
+export const empty = (element) => {
+  while (element.firstChild) {
+    element.removeChild(element.firstChild);
+  }
+}

@@ -2,7 +2,7 @@ class Player {
   constructor() {
     this.name = '';
     this.base = null;
-    this.runs;
+    this.runs = 0;
     this.position;
     this.order;
     this.atBats = [];
@@ -20,9 +20,9 @@ class Player {
     }).length;
   }
 
-  advanceBase(x) {
+  advanceBase(x, init) {
     let run = 0;
-    if (this.base) {
+    if (this.base || init) {
       this.base += x;
       if (this.base > 3) {
         this.base = null;
@@ -30,6 +30,7 @@ class Player {
         run = 1;
       }
     }
+    this.runs += run;
     return run;
   }
 }

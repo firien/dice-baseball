@@ -1,0 +1,34 @@
+<?xml version='1.0' encoding='utf-8' ?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg height='256' viewBox='16 32 96 96' width='256' xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <style type="text/css">
+    <![CDATA[
+      rect.field  {
+        fill: lightgreen;
+      }
+      path.infield  {
+        fill: sienna;
+      }
+      path.line {
+        stroke: white;
+        stroke-width: 1px;
+        fill: none;
+      }
+      rect.base {
+        stroke: black;
+        fill: white;
+      }
+    ]]>
+  </style>
+  <rect class="field" x="0" y="0" width="128" height="128"/>
+  <!-- <path fill="red" d="M 64 120 l 40 -40 c -20 -30 -60 -30 -80 0z"/> -->
+  <!-- <path class="infield" transform="rotate(-45 64 120)" d="M 64 120 h 56 c 20 -30 -26 -76 -56 -56z"/> -->
+  <g transform="rotate(-45 64 120)"> 
+    <path class="infield" d="M 64 120 h 56 c 6 -40 -16 -62 -56 -56z
+        M 72 116 a 4 4 0 0 0 -4 -4 v -20 a 4 4 0 0 0 4 -4 h 20 a 4 4 0 0 0 4 4 v 20 a 4 4 0 0 0 -4 4z"/>
+    <path class="line" d="M 66 0 V 118 h 120"/>
+    <rect class="base" x="95" y="115" width="3" height="3"/>
+    <rect class="base" x="66" y="86" width="3" height="3"/>
+    <rect class="base" x="95" y="86" width="3" height="3"/>
+  </g>
+</svg>

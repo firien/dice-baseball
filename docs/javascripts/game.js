@@ -1,6 +1,7 @@
 import Die from './die.js';
 import Team from './team.js';
 import Inning from './inning.js';
+import {logger} from './utils.js'
 
 const results = [
   'HBP',//3
@@ -23,21 +24,31 @@ const results = [
 
 class Game {
   constructor() {
-    this.homeTeam = new Team();
-    this.awayTeam = new Team();
+    this.homeTeam = new Team('Home');
+    this.awayTeam = new Team('Away');
     this.innings = [];
-    // debugger
-    for (let i=0; i<=8; i++) {
+    for (let i=0; i<=17; i++) {
       let inning = new Inning();
       this.innings.push(inning);
     }
-    this.currentInning = this.innings[0];
+    this._currentInning = 0;
   }
 
-  bat() {
-    let team = this.homeTeam;
+  nextInning() {
+    this._currentInning++;
+    console.log(`inning change ${this._currentInning}`)
+  }
+
+  get currentTeam() {
+    return this._currentInning % 2 === 0 ? this.awayTeam : this.homeTeam;
+  }
+
+  get currentInning() {
+    return this.innings[this._currentInning];
+  }
+  bat(dice) {
+    let team = this.currentTeam;
     let nextBatter = team.onDeck(); 
-    let dice = this.roll();
     let total = 0;
     for (let die of dice) {
       total += die;
@@ -46,8 +57,14 @@ class Game {
     let outs = 0;
     let advance = 0;
     let includeBatter = true;
-    switch(results[total-3]) {
-      case '1B', 'BB', 'HBP':
+    let outcome = results[total-3];
+    switch(outcome) {
+      case '1B':
+      case 'BB':
+      case 'HBP':
+        advance = 1;
+        break;
+      case 'BB':
         advance = 1;
         break;
       case '2B':
@@ -65,32 +82,41 @@ class Game {
         break;
       case 'DP':
         outs = 1;
+        // man on first?
         if (team.players.some(p => p.base === 1)) {
           outs++;
         }
-        // man on first?
         break;
       default:
         outs = 1;
     }
-    team.currentBatter.atBats.push(results[total-3]);
+    team.currentBatter.atBats.push(outcome);
     if (advance) {
-      for (let player of team.players) {
-        if (player.base === 0) {
-          if (includeBatter) {
-            runs += player.advanceBase(advance);
-          }
-        } else {
-          runs += player.advanceBase(advance);
+      let runners = team.players.filter(p => p.base > 0).sort((a,b) => {
+        return a.base - b.base;
+      });
+      if (includeBatter) {
+        runs += team.currentBatter.advanceBase(advance, true);
+      }
+      if (outcome === 'BB') {
+        // only advance runners if necessary
+        for (let runner of runners) {
+          runs += runner.advanceBase(advance);
+        }
+      } else {
+        for (let runner of runners) {
+          runs += runner.advanceBase(advance);
         }
       }
     }
     // next batter
     team.currentBatter = nextBatter;
     //add runs to inning
-    this.currentInning.addOuts(outs);
-    if (this.currentInning.addRuns(runs)) {
-      //next inning
+    console.log(`${outcome} - ${outs} - ${runs}`)
+    this.currentInning.addRuns(runs);
+    if (this.currentInning.addOuts(outs)) {
+      team.clearBases();
+      this.nextInning();
     }
   }
 

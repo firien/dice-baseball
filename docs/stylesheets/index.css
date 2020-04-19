@@ -74,3 +74,81 @@ form#answer.hidden {
   display: none;
 }
 
+.die {
+  font-size: 25vw;
+}
+
+/* svg */
+
+svg {
+  width: 100vw;
+  /* height: 100%; */
+}
+rect.field  {
+  fill: lightgreen;
+}
+path.infield  {
+  fill: sienna;
+}
+path.line {
+  stroke: white;
+  stroke-width: 1px;
+  fill: none;
+}
+rect.base {
+  stroke: black;
+  fill: white;
+}
+rect.base.occupied {
+  fill: black;
+}
+#roll-result {
+  display: flex;
+  position: absolute;
+  bottom: 0;
+  justify-content: space-around;
+  width: 100vw;
+}
+
+button#roll {
+  display: block;
+  width: 100vw;
+  /* margin: 1em; */
+}
+
+#scoreboard {
+  display: grid;
+  grid-template-rows: 1fr 1fr 1fr;
+  grid-template-columns: 20% auto 10% 10%;
+  grid-template-areas: 
+    "info inning hit run"
+    "home inning home-hit home-run"
+    "away inning away-hit away-run";
+}
+#home-team {
+  grid-area: home;
+}
+#away-team {
+  grid-area: away;
+}
+
+#home-hits {
+  grid-area: home-hit;
+}
+#home-runs {
+  grid-area: home-run;
+}
+
+#away-hits {
+  grid-area: away-hit;
+}
+#away-runs {
+  grid-area: away-run;
+}
+
+#hit {
+  grid-area: hit;
+}
+#run {
+  grid-area: run;
+}

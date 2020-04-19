@@ -1,7 +1,8 @@
 import Player from './player.js';
 
 class Team {
-  constructor() {
+  constructor(name) {
+    this.name = name;
     this.players = [];
     for (let i=1; i<=9; i++) {
       let player = new Player();
@@ -30,6 +31,16 @@ class Team {
   onDeck() {
     let order = this.currentBatter.order
     return (order === 9) ? 1 : ++order;
+  }
+  clearBases() {
+    for (let player of this.players) {
+      if (player.base > 0) {
+        player.base = null;
+      }
+    }
+  }
+  playerOn(base) {
+    return this.players.find(p => p.base === base)
   }
 }
 

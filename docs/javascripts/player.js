@@ -8,7 +8,7 @@ class Player {
   }
 
   get name() {
-    return `Batter ${this.order}`
+    return `Player ${this.order}`;
   }
 
   get stats() {

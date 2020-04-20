@@ -36,7 +36,6 @@ class Game {
 
   nextInning() {
     this._currentInning++;
-    console.log(`inning change ${this._currentInning}`)
   }
 
   get currentTeam() {
@@ -107,6 +106,8 @@ class Game {
     }
     team.currentBatter.atBats.push(outcome);
     if (this.currentInning.addOuts(outs)) {
+      // next batter
+      team.currentBatter = nextBatter;
       team.clearBases();
       this.nextInning();
     } else {

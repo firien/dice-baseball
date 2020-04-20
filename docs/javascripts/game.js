@@ -66,7 +66,7 @@ class Game {
     let runs = 0;
     let outs = 0;
     let advance = 0;
-    let includeBatter = true;
+    let advanceBatter = true;
     let outcome = results[total-3];
     switch(outcome) {
       case '1B':
@@ -87,13 +87,13 @@ class Game {
         advance = 4;
         break;
       case 'SAC':
-        includeBatter = false;
+        advanceBatter = false;
         advance = 1;
         outs = 1;
         break;
       case 'DP':
         outs = 1;
-        includeBatter = false;
+        advanceBatter = false;
         advance = 1;
         // man on first?
         let manOnFirst = team.playerOn(1);
@@ -106,32 +106,46 @@ class Game {
         outs = 1;
     }
     team.currentBatter.atBats.push(outcome);
-    if (advance) {
-      let runners = team.players.filter(p => p.base > 0).sort((a,b) => {
-        return a.base - b.base;
-      });
-      if (includeBatter) {
-        runs += team.currentBatter.advanceBase(advance, true);
-      }
-      if (outcome === 'BB') {
-        // only advance runners if necessary
-        for (let runner of runners) {
-          runs += runner.advanceBase(advance);
-        }
-      } else {
-        for (let runner of runners) {
-          runs += runner.advanceBase(advance);
-        }
-      }
-    }
-    // next batter
-    team.currentBatter = nextBatter;
-    //add runs to inning
-    console.log(`${outcome} - ${outs} - ${runs}`)
-    this.currentInning.addRuns(runs);
     if (this.currentInning.addOuts(outs)) {
       team.clearBases();
       this.nextInning();
+    } else {
+      if (advance) {
+        let runners = team.players.filter(p => p.base > 0).sort((a,b) => {
+          return a.base - b.base;
+        });
+        if (advanceBatter) {
+          runs += team.currentBatter.advanceBase(advance, true);
+        }
+        if (outcome === 'BB') {
+          // only advance runners if necessary
+          let byte = runners.reduce((byte, runner) => {
+            return byte | (1 << (runner.base - 1))
+          }, 0)
+          let manOnBase;
+          if ((byte & 0b111) === 0b111) {//advance 3rd
+            manOnBase = runners.find(p => p.base === 3);
+            manOnBase.advanceBase(advance);
+          }
+          if ((byte & 0b11) === 0b11) {//advance 2nd
+            manOnBase = runners.find(p => p.base === 2);
+            manOnBase.advanceBase(advance);
+          }
+          if ((byte & 0b1) === 0b1) {//advance 1st
+            manOnBase = runners.find(p => p.base === 1);
+            manOnBase.advanceBase(advance);
+          }
+        } else {
+          for (let runner of runners) {
+            runs += runner.advanceBase(advance);
+          }
+        }
+      }
+      // next batter
+      team.currentBatter = nextBatter;
+      //add runs to inning
+      // console.log(`${outcome} - ${outs} - ${runs}`)
+      this.currentInning.addRuns(runs);
     }
     return outcome;
   }

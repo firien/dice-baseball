@@ -46,7 +46,7 @@ class Team {
     return this.players.reduce((sum, p) => sum += p.runs, 0);
   }
   get totalHits() {
-    return this.players.reduce((sum, p) => sum += p.hitCount(), 0);
+    return this.players.reduce((sum, p) => sum += p.hitCount, 0);
   }
 }
 

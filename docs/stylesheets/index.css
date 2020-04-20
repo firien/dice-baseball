@@ -164,3 +164,19 @@ button#roll {
 .atbat {
   font-weight: bold;
 }
+#batter {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+}
+#batter #name {
+  font-size: 8vw;
+  flex: 1 1 70%
+}
+#batter #stat {
+  flex: 1 1 30%
+}
+#batter #bats {
+  /* font-size: 2vw; */
+  flex: 0 0 100%
+}

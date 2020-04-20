@@ -1,19 +1,27 @@
 class Player {
   constructor() {
-    this.name = '';
     this.base = null;
     this.runs = 0;
     this.position;
     this.order;
     this.atBats = [];
   }
-  atBatCount() {
+
+  get name() {
+    return `Batter ${this.order}`
+  }
+
+  get stats() {
+    return `${this.hitCount} for ${this.atBatCount}`;
+  }
+
+  get atBatCount() {
     return this.atBats.filter((ab) => {
       return ab !== 'BB';
     }).length;
   }
 
-  hitCount() {
+  get hitCount() {
     let hits = ['1B', '2B', '3B', 'HR'];
     return this.atBats.filter((ab) => {
       return hits.includes(ab)

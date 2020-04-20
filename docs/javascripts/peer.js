@@ -130,6 +130,14 @@ const updateScoreboard = (game) => {
   document.querySelector('#away-team').classList.toggle('atbat', top)
 }
 
+const updateBatter = (game) => {
+  let team = game.currentTeam;
+  let batter = team.currentBatter;
+  document.querySelector('#batter #name').textContent = batter.name;
+  document.querySelector('#batter #stat').textContent = batter.stats;
+  document.querySelector('#batter #bats').textContent = batter.atBats.join(", ");
+}
+
 document.addEventListener('DOMContentLoaded', async (e) => {
   let button = document.querySelector('#create');
   button.addEventListener('click', createOfferSDP);
@@ -193,6 +201,8 @@ document.addEventListener('DOMContentLoaded', async (e) => {
     }
     //update scoreboard
     updateScoreboard(game);
+    //update batter
+    updateBatter(game);
     document.querySelector('#info').textContent = game.inningTitle;
   })
 })

@@ -116,17 +116,17 @@ rect.base.occupied {
 #roll-result {
   display: flex;
   position: absolute;
-  top: 100vh;
-  /* justify-content: space-around;
-   */
+  bottom: 0;
+  /* transform: translateY(100%); */
   flex-wrap: wrap;
   width: 100vw;
   -webkit-backdrop-filter: blur(0.3em);
+  backdrop-filter: blur(0.3em);
   background-color: rgba(255, 255, 255, 0.3);
-  transition: transform 0.3s ease-in-out;
+  /* transition: transform 0.3s ease-in-out; */
 }
 #roll-result.peek {
-  transform: translateY(-100%);
+  transform: translateY(0);
 }
 
 button#roll {

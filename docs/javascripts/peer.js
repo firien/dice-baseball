@@ -182,17 +182,8 @@ document.addEventListener('DOMContentLoaded', async (e) => {
   let game = new Game();
   let roller = document.querySelector('button#roll');
   let div = document.querySelector('div#roll-result');
-  div.addEventListener('transitionend', () => {
-    setTimeout(() => {
-      div.classList.remove('peek');
-    }, 700);
-    setTimeout(() => {
-      roller.disabled = false;
-    }, 1100);
-  })
   roller.addEventListener('click', (e) => {
     roller.disabled = true;
-    // empty(div);
     let roll = game.roll();
     roll.forEach((number, i) => {
       let text = String.fromCharCode(Die.faces[number]);
@@ -201,7 +192,16 @@ document.addEventListener('DOMContentLoaded', async (e) => {
     })
     let outcome = game.bat(roll);
     document.querySelector('#outcome').textContent = outcome;
-    div.classList.add('peek');
+    let animation = div.animate({ transform: ["translateY(100%)", "translateY(0)", "translateY(100%)"]}, {easing: "ease-in-out", fill: 'forwards', duration: 1200});
+    setTimeout(() => {
+      animation.pause();
+      setTimeout(() => {
+        animation.play();
+      }, 600);
+    }, 600);
+    animation.onfinish = () => {
+      roller.disabled = false;
+    };
     //update field
     for (let base=1; base<=3; base++) {
       let player = game.currentTeam.playerOn(base);

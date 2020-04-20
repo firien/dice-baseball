@@ -92,6 +92,7 @@ class Game {
         break;
       case 'DP':
         outs = 1;
+        advance = 1;
         // man on first?
         let manOnFirst = team.playerOn(1);
         if (manOnFirst) {

@@ -181,8 +181,17 @@ document.addEventListener('DOMContentLoaded', async (e) => {
   // })
   let game = new Game();
   let roller = document.querySelector('button#roll');
+  let div = document.querySelector('div#roll-result');
+  div.addEventListener('transitionend', () => {
+    setTimeout(() => {
+      div.classList.remove('peek');
+    }, 700);
+    setTimeout(() => {
+      roller.disabled = false;
+    }, 1100);
+  })
   roller.addEventListener('click', (e) => {
-    let div = document.querySelector('div#roll-result');
+    roller.disabled = true;
     // empty(div);
     let roll = game.roll();
     roll.forEach((number, i) => {
@@ -190,9 +199,9 @@ document.addEventListener('DOMContentLoaded', async (e) => {
       let span = div.querySelector(`.die:nth-child(${i+1})`);
       span.textContent = text;
     })
-    document.body.appendChild(div);
     let outcome = game.bat(roll);
     document.querySelector('#outcome').textContent = outcome;
+    div.classList.add('peek');
     //update field
     for (let base=1; base<=3; base++) {
       let player = game.currentTeam.playerOn(base);

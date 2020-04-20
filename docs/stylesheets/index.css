@@ -112,17 +112,26 @@ rect.base.occupied {
 #roll-result {
   display: flex;
   position: absolute;
-  bottom: 0;
+  top: 100vh;
   /* justify-content: space-around;
    */
   flex-wrap: wrap;
   width: 100vw;
+  -webkit-backdrop-filter: blur(0.2em);
+  background-color: rgba(255, 255, 255, 0.3);
+  transition: transform 0.3s ease-in-out;
+}
+#roll-result.peek {
+  transform: translateY(-100%);
 }
 
 button#roll {
-  display: block;
-  width: 100vw;
-  /* margin: 1em; */
+  position: absolute;
+  bottom: 0;
+  /* display: block; */
+  width: calc(100vw - 2em);
+  margin: 1em;
+  padding: 1em;
 }
 
 #scoreboard {

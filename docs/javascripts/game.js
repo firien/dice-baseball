@@ -89,6 +89,7 @@ class Game {
       case 'SAC':
         includeBatter = false;
         advance = 1;
+        outs = 1;
         break;
       case 'DP':
         outs = 1;

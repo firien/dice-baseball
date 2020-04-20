@@ -124,6 +124,10 @@ const updateScoreboard = (game) => {
   homeHits.textContent = game.homeTeam.totalHits;
   let awayHits = document.querySelector('#away-hits');
   awayHits.textContent = game.awayTeam.totalHits;
+  //
+  let top = game.topOfInning;
+  document.querySelector('#home-team').classList.toggle('atbat', !top)
+  document.querySelector('#away-team').classList.toggle('atbat', top)
 }
 
 document.addEventListener('DOMContentLoaded', async (e) => {

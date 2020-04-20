@@ -131,8 +131,8 @@ button#roll {
   grid-template-columns: 28% auto 10% 10%;
   grid-template-areas: 
     "info inning hit run"
-    "home inning home-hit home-run"
-    "away inning away-hit away-run";
+    "away inning away-hit away-run"
+    "home inning home-hit home-run";
 }
 #home-team {
   grid-area: home;
@@ -160,4 +160,7 @@ button#roll {
 }
 #run {
   grid-area: run;
+}
+.atbat {
+  font-weight: bold;
 }

@@ -40,12 +40,16 @@ class Game {
   }
 
   get currentTeam() {
-    return this._currentInning % 2 === 0 ? this.awayTeam : this.homeTeam;
+    return this.topOfInning ? this.awayTeam : this.homeTeam;
+  }
+
+  get topOfInning() {
+    return this._currentInning % 2 === 0;
   }
 
   get inningTitle() {
     let val = Math.floor(this._currentInning / 2) + 1;
-    let tb = this._currentInning % 2 === 0 ? '↑' : '↓';
+    let tb = this.topOfInning ? '↑' : '↓';
     return `${val}${tb} ${this.currentInning.outs} OUTS`
   }
 

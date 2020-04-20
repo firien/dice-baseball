@@ -93,6 +93,7 @@ class Game {
         break;
       case 'DP':
         outs = 1;
+        includeBatter = false;
         advance = 1;
         // man on first?
         let manOnFirst = team.playerOn(1);

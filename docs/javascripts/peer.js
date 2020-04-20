@@ -116,12 +116,14 @@ peerConnection.ondatachannel = (e) => {
 
 const updateScoreboard = (game) => {
   let homeRuns = document.querySelector('#home-runs');
-  let runs = game.homeTeam.players.reduce((sum, p) => sum += p.runs, 0);
-  homeRuns.textContent = runs;
+  homeRuns.textContent = game.homeTeam.totalRuns;
   let awayRuns = document.querySelector('#away-runs');
-  runs = game.awayTeam.players.reduce((sum, p) => sum += p.runs, 0);
-  awayRuns.textContent = runs;
-
+  awayRuns.textContent = game.awayTeam.totalRuns;
+  //hits
+  let homeHits = document.querySelector('#home-hits');
+  homeHits.textContent = game.homeTeam.totalHits;
+  let awayHits = document.querySelector('#away-hits');
+  awayHits.textContent = game.awayTeam.totalHits;
 }
 
 document.addEventListener('DOMContentLoaded', async (e) => {
@@ -166,21 +168,19 @@ document.addEventListener('DOMContentLoaded', async (e) => {
   //   test2()
   // })
   let game = new Game();
-  let roller = document.querySelector('button#roll')
-  let div = document.createElement('div');
-  div.id = 'roll-result'
+  let roller = document.querySelector('button#roll');
   roller.addEventListener('click', (e) => {
-    empty(div);
+    let div = document.querySelector('div#roll-result');
+    // empty(div);
     let roll = game.roll();
-    for (let number of roll) {
+    roll.forEach((number, i) => {
       let text = String.fromCharCode(Die.faces[number]);
-      let span = document.createElement('span');
-      span.classList.add('die');
+      let span = div.querySelector(`.die:nth-child(${i+1})`);
       span.textContent = text;
-      div.appendChild(span);
-    }
+    })
     document.body.appendChild(div);
-    game.bat(roll);
+    let outcome = game.bat(roll);
+    document.querySelector('#outcome').textContent = outcome;
     //update field
     for (let base=1; base<=3; base++) {
       let player = game.currentTeam.playerOn(base);
@@ -189,5 +189,6 @@ document.addEventListener('DOMContentLoaded', async (e) => {
     }
     //update scoreboard
     updateScoreboard(game);
+    document.querySelector('#info').textContent = game.inningTitle;
   })
 })

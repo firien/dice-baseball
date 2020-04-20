@@ -43,6 +43,12 @@ class Game {
     return this._currentInning % 2 === 0 ? this.awayTeam : this.homeTeam;
   }
 
+  get inningTitle() {
+    let val = Math.floor(this._currentInning / 2) + 1;
+    let tb = this._currentInning % 2 === 0 ? '↑' : '↓';
+    return `${val}${tb} ${this.currentInning.outs} OUTS`
+  }
+
   get currentInning() {
     return this.innings[this._currentInning];
   }
@@ -118,6 +124,7 @@ class Game {
       team.clearBases();
       this.nextInning();
     }
+    return outcome;
   }
 
   roll() {

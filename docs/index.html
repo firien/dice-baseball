@@ -22,6 +22,7 @@
     <noscript>
       <div>Requires Javascript</div>
     </noscript>
+    <div class="hidden">
     <header>
       <h1>Game Options</h1>
       <button id="create" title="Settings">Create Game</button>
@@ -35,6 +36,7 @@
       <button type="submit">Answer</button>
     </form>
     <div id="messages"></div>
+    </div>
     <!--span class="die">⚀</span>
     <span class="die">⚁</span>
     <span class="die">⚂</span>
@@ -46,7 +48,7 @@
       <input type="number" step="1" value="0" name="add">
     </form-->
     <div id="scoreboard">
-      <div id="info"></div>
+      <div id="info">1↑ 0 OUTS</div>
       <div id="hit">H</div>
       <div id="run">R</div>
       <div id="home-team">Home</div>
@@ -70,6 +72,12 @@
       </g>
     </svg>
     <button id="roll" type="button">Roll</button>
+    <div id="roll-result">
+      <div class="die"></div>
+      <div class="die"></div>
+      <div class="die"></div>
+      <div id="outcome"></div>
+    </div>
     <div id="console"></div>
   </body>
 </html>

@@ -42,6 +42,12 @@ class Team {
   playerOn(base) {
     return this.players.find(p => p.base === base)
   }
+  get totalRuns() {
+    return this.players.reduce((sum, p) => sum += p.runs, 0);
+  }
+  get totalHits() {
+    return this.players.reduce((sum, p) => sum += p.hitCount(), 0);
+  }
 }
 
 export default Team;

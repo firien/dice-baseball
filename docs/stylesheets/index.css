@@ -76,8 +76,15 @@ form#answer.hidden {
 
 .die {
   font-size: 25vw;
+  flex: 1 1 33%;
+  align-self: center;
+  text-align: center;
 }
-
+#outcome {
+  flex: 0 0 100%;
+  text-align: center;
+  font-size: 10vw;
+}
 /* svg */
 
 svg {
@@ -106,7 +113,9 @@ rect.base.occupied {
   display: flex;
   position: absolute;
   bottom: 0;
-  justify-content: space-around;
+  /* justify-content: space-around;
+   */
+  flex-wrap: wrap;
   width: 100vw;
 }
 
@@ -119,7 +128,7 @@ button#roll {
 #scoreboard {
   display: grid;
   grid-template-rows: 1fr 1fr 1fr;
-  grid-template-columns: 20% auto 10% 10%;
+  grid-template-columns: 28% auto 10% 10%;
   grid-template-areas: 
     "info inning hit run"
     "home inning home-hit home-run"

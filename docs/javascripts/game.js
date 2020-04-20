@@ -89,7 +89,9 @@ class Game {
       case 'DP':
         outs = 1;
         // man on first?
-        if (team.players.some(p => p.base === 1)) {
+        let manOnFirst = team.playerOn(1);
+        if (manOnFirst) {
+          manOnFirst.base = null;
           outs++;
         }
         break;

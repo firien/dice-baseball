@@ -128,15 +128,15 @@ class Game {
           let manOnBase;
           if ((byte & 0b111) === 0b111) {//advance 3rd
             manOnBase = runners.find(p => p.base === 3);
-            manOnBase.advanceBase(advance);
+            runs += manOnBase.advanceBase(advance);
           }
           if ((byte & 0b11) === 0b11) {//advance 2nd
             manOnBase = runners.find(p => p.base === 2);
-            manOnBase.advanceBase(advance);
+            runs += manOnBase.advanceBase(advance);
           }
           if ((byte & 0b1) === 0b1) {//advance 1st
             manOnBase = runners.find(p => p.base === 1);
-            manOnBase.advanceBase(advance);
+            runs += manOnBase.advanceBase(advance);
           }
         } else {
           for (let runner of runners) {

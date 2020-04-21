@@ -57,9 +57,58 @@
       <div id="away-team" class="atbat">Away</div>
       <div id="away-hits">0</div>
       <div id="away-runs">0</div>
+      <div id="innings">
+        <div>1</div>
+        <div>2</div>
+        <div>3</div>
+        <div>4</div>
+        <div>5</div>
+        <div>6</div>
+        <div>7</div>
+        <div>8</div>
+        <div>9</div>
+        <div id="a1"></div>
+        <div id="a2"></div>
+        <div id="a3"></div>
+        <div id="a4"></div>
+        <div id="a5"></div>
+        <div id="a6"></div>
+        <div id="a7"></div>
+        <div id="a8"></div>
+        <div id="a9"></div>
+        <div id="h1"></div>
+        <div id="h2"></div>
+        <div id="h3"></div>
+        <div id="h4"></div>
+        <div id="h5"></div>
+        <div id="h6"></div>
+        <div id="h7"></div>
+        <div id="h8"></div>
+        <div id="h8"></div>
+      </div>
     </div>
     <svg viewBox='16 32 96 96' xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-      <rect class="field" x="0" y="0" width="128" height="128"/>
+      <defs>
+        <pattern id="lawnmower" patternUnit="userSpaceOnUse" height=".125" width=".25">
+          <rect x="0" y="0" height="16" width="2"  shape-rendering="crispEdges" stroke="none" fill="#468944"/>
+          <rect x="2" y="0" height="16" width="2"  shape-rendering="crispEdges" stroke="none" fill="#3B8039"/>
+          <rect x="4" y="0" height="16" width="2"  shape-rendering="crispEdges" stroke="none" fill="#468944"/>
+          <rect x="6" y="0" height="16" width="2"  shape-rendering="crispEdges" stroke="none" fill="#3B8039"/>
+          <rect x="8" y="0" height="16" width="2"  shape-rendering="crispEdges" stroke="none" fill="#468944"/>
+          <rect x="10" y="0" height="16" width="2" shape-rendering="crispEdges" stroke="none" fill="#3B8039"/>
+          <rect x="12" y="0" height="16" width="2" shape-rendering="crispEdges" stroke="none" fill="#468944"/>
+          <rect x="14" y="0" height="16" width="2" shape-rendering="crispEdges" stroke="none" fill="#3B8039"/>
+          <rect x="16" y="0" height="16" width="2" shape-rendering="crispEdges" stroke="none" fill="#468944"/>
+          <rect x="18" y="0" height="16" width="2" shape-rendering="crispEdges" stroke="none" fill="#3B8039"/>
+          <rect x="20" y="0" height="16" width="2" shape-rendering="crispEdges" stroke="none" fill="#468944"/>
+          <rect x="22" y="0" height="16" width="2" shape-rendering="crispEdges" stroke="none" fill="#3B8039"/>
+          <rect x="24" y="0" height="16" width="2" shape-rendering="crispEdges" stroke="none" fill="#468944"/>
+          <rect x="26" y="0" height="16" width="2" shape-rendering="crispEdges" stroke="none" fill="#3B8039"/>
+          <rect x="28" y="0" height="16" width="2" shape-rendering="crispEdges" stroke="none" fill="#468944"/>
+          <rect x="30" y="0" height="16" width="2" shape-rendering="crispEdges" stroke="none" fill="#3B8039"/>
+        </pattern>
+      </defs>
+      <rect class="field" x="0" y="0" width="128" height="128" fill="url(#lawnmower)"/>
       <!-- <path fill="red" d="M 64 120 l 40 -40 c -20 -30 -60 -30 -80 0z"/> -->
       <!-- <path class="infield" transform="rotate(-45 64 120)" d="M 64 120 h 56 c 20 -30 -26 -76 -56 -56z"/> -->
       <g transform="rotate(-45 64 120)"> 
@@ -70,6 +119,9 @@
         <rect class="base" data-base="2" x="95" y="86" width="3" height="3"/>
         <rect class="base" data-base="3" x="66" y="86" width="3" height="3"/>
       </g>
+      <rect x="0" y="0" height="8" width="8" fill="lightgreen"/>
+      <rect x="8" y="0" height="8" width="8" fill="darkgreen"/>
+
     </svg>
     <div id="console"></div>
     <div id="batter">
@@ -79,9 +131,9 @@
     </div>
     <button id="roll" type="button">Roll</button>
     <div id="roll-result">
-      <div class="die"></div>
-      <div class="die"></div>
-      <div class="die"></div>
+      <div class="die">P</div>
+      <div class="die">L</div>
+      <div class="die">G</div>
       <div id="outcome"></div>
     </div>
   </body>

@@ -36,6 +36,8 @@ class Game {
 
   nextInning() {
     this._currentInning++;
+    let evt = new CustomEvent('inningChange');
+    self.dispatchEvent(evt);
   }
 
   get currentTeam() {
@@ -46,10 +48,13 @@ class Game {
     return this._currentInning % 2 === 0;
   }
 
+  get inningNumber() {
+    return Math.floor(this._currentInning / 2) + 1;
+  }
+
   get inningTitle() {
-    let val = Math.floor(this._currentInning / 2) + 1;
     let tb = this.topOfInning ? '↑' : '↓';
-    return `${val}${tb} ${this.currentInning.outs} OUTS`
+    return `${this.inningNumber}${tb} ${this.currentInning.outs} OUTS`
   }
 
   get currentInning() {

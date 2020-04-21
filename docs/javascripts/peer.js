@@ -128,6 +128,10 @@ const updateScoreboard = (game) => {
   let top = game.topOfInning;
   document.querySelector('#home-team').classList.toggle('atbat', !top)
   document.querySelector('#away-team').classList.toggle('atbat', top)
+  //
+  let t = game.topOfInning ? 'a' : 'h';
+  let id = `#${t}${game.inningNumber}`
+  document.querySelector(id).textContent = game.currentInning.runs;
 }
 
 const updateBatter = (game) => {
@@ -137,7 +141,15 @@ const updateBatter = (game) => {
   document.querySelector('#batter #stat').textContent = batter.stats;
   document.querySelector('#batter #bats').textContent = batter.atBats.join(", ");
 }
-
+window.addEventListener('inningChange', () => {
+  document.querySelector('#info').animate({
+    transform: ["scale(1)", "scale(3)", "scale(1)"],
+  },
+  {
+    easing: "ease-in-out", duration: 2000
+  }
+)
+});
 document.addEventListener('DOMContentLoaded', async (e) => {
   let button = document.querySelector('#create');
   button.addEventListener('click', createOfferSDP);
@@ -192,15 +204,16 @@ document.addEventListener('DOMContentLoaded', async (e) => {
     })
     let outcome = game.bat(roll);
     document.querySelector('#outcome').textContent = outcome;
-    let animation = div.animate({ transform: ["translateY(100%)", "translateY(0)", "translateY(100%)"]}, {easing: "ease-in-out", fill: 'forwards', duration: 1200});
-    setTimeout(() => {
-      animation.pause();
-      setTimeout(() => {
-        animation.play();
-      }, 600);
-    }, 600);
+    let animation = div.animate({
+        transform: ["translateY(0)", "translateY(-100%)", "translateY(-100%)", , "translateY(0)"],
+        offset: [0, .2, 0.8, 1]
+      },
+      { easing: "ease-in-out", fill: 'forwards', duration: 2000
+    });
     animation.onfinish = () => {
       roller.disabled = false;
+      //update batter
+      updateBatter(game);
     };
     //update field
     for (let base=1; base<=3; base++) {
@@ -210,8 +223,6 @@ document.addEventListener('DOMContentLoaded', async (e) => {
     }
     //update scoreboard
     updateScoreboard(game);
-    //update batter
-    updateBatter(game);
     document.querySelector('#info').textContent = game.inningTitle;
   })
 })

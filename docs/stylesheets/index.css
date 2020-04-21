@@ -10,9 +10,9 @@
   display: none;
 }
 
-body {
-  overflow-y: hidden;
-  height: 100%;
+html, body {
+  overflow: hidden;
+  height: 100vh;
 }
 span.sent {
   flex: 0 0 auto;
@@ -97,6 +97,7 @@ svg {
 }
 rect.field  {
   fill: lightgreen;
+  fill: url(#lawnmower);
 }
 path.infield  {
   fill: sienna;
@@ -116,19 +117,14 @@ rect.base.occupied {
 #roll-result {
   display: flex;
   position: absolute;
-  bottom: 0;
-  /* transform: translateY(100%); */
+  /* bottom: 0; */
+  top: 100vh;
   flex-wrap: wrap;
   width: 100vw;
   -webkit-backdrop-filter: blur(0.3em);
   backdrop-filter: blur(0.3em);
   background-color: rgba(255, 255, 255, 0.3);
-  /* transition: transform 0.3s ease-in-out; */
 }
-#roll-result.peek {
-  transform: translateY(0);
-}
-
 button#roll {
   position: absolute;
   bottom: env(safe-area-inset-bottom);
@@ -146,6 +142,18 @@ button#roll {
     "info inning hit run"
     "away inning away-hit away-run"
     "home inning home-hit home-run";
+}
+#innings {
+  grid-area: inning;
+  display: grid;
+  grid-template-rows: 1fr 1fr 1fr;
+  grid-template-columns: repeat(9, 11%);
+  overflow-x: auto;
+}
+#info {
+  transform-origin: 0 0;
+  background-color: white;
+  white-space: nowrap;
 }
 #home-team {
   grid-area: home;

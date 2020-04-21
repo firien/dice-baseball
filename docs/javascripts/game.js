@@ -78,9 +78,6 @@ class Game {
       case 'HBP':
         advance = 1;
         break;
-      case 'BB':
-        advance = 1;
-        break;
       case '2B':
         advance = 2;
         break;

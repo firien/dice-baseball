@@ -208,7 +208,7 @@ document.addEventListener('DOMContentLoaded', async (e) => {
         transform: ["translateY(0)", "translateY(-100%)", "translateY(-100%)", , "translateY(0)"],
         offset: [0, .2, 0.8, 1]
       },
-      { easing: "ease-in-out", fill: 'forwards', duration: 2000
+      { easing: "ease-in-out", fill: 'forwards', duration: 1600
     });
     animation.onfinish = () => {
       roller.disabled = false;

@@ -195,7 +195,7 @@ document.addEventListener('DOMContentLoaded', async (e) => {
       span.style.top = `${box.bottom + 15}px`;
       span.style.left = `${box.x + 15}px`;
     } else if (base === 2) {
-      span.style.top = `${box.top - 30}px`;
+      span.style.top = `${box.top - 40}px`;
       span.style.left = '50%';
     } else {
       span.style.right = `${window.innerWidth - box.x}px`;

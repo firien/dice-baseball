@@ -12,7 +12,7 @@
 
 html, body {
   overflow: hidden;
-  height: 100vh;
+  height: 100%;
 }
 span.sent {
   flex: 0 0 auto;
@@ -200,4 +200,16 @@ button#roll {
 #batter #bats {
   /* font-size: 2vw; */
   flex: 0 0 100%
+}
+
+#runners > span {
+  position: absolute;
+  background-color: white;
+  border: thin black solid;
+  padding: 0.2em;
+  border-radius: 0.2em;
+}
+
+#runners > span:empty {
+  display: none;
 }

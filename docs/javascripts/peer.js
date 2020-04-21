@@ -186,11 +186,23 @@ document.addEventListener('DOMContentLoaded', async (e) => {
       formChat.reset();
     }
   })
-  // document.querySelector('#roll').addEventListener('input', (e) => {
-  //   let form = e.currentTarget;
-  //   // test(Number(form.n.value), Number(form.add.value));
-  //   test2()
-  // })
+
+  for (let base=1; base<=3; base++) {
+    let rect = document.querySelector(`rect[data-base='${base}']`);
+    let box = rect.getBoundingClientRect();
+    let span = document.querySelector(`#runners span:nth-child(${base})`)
+    if (base === 1) {
+      span.style.top = `${box.bottom + 15}px`;
+      span.style.left = `${box.x + 15}px`;
+    } else if (base === 2) {
+      span.style.top = `${box.top - 30}px`;
+      span.style.left = '50%';
+    } else {
+      span.style.right = `${window.innerWidth - box.x}px`;
+      span.style.top = `${box.bottom + 15}px`;
+    }
+  }
+  
   let game = new Game();
   let roller = document.querySelector('button#roll');
   let div = document.querySelector('div#roll-result');
@@ -220,6 +232,8 @@ document.addEventListener('DOMContentLoaded', async (e) => {
       let player = game.currentTeam.playerOn(base);
       let rect = document.querySelector(`rect[data-base='${base}']`)
       rect.classList.toggle('occupied', !!player);
+      let span = document.querySelector(`#runners span:nth-child(${base})`)
+      span.textContent = player ? player.name : '';
     }
     //update scoreboard
     updateScoreboard(game);

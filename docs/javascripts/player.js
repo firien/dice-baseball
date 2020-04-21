@@ -16,6 +16,7 @@ class Player {
   }
 
   get atBatCount() {
+    const nonAtBats = ['BB', 'HBP']
     return this.atBats.filter((ab) => {
       return ab !== 'BB';
     }).length;

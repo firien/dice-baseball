@@ -56,6 +56,9 @@ class Organ {
     organ.play("E4", now + 1.25);
     organ.play("G4", now + 1.5, 0.5);
     organ.play("D4", now + 2.25, 0.5);
+    setTimeout(() => {
+      context.close();
+    }, 3000)
   }
 }
 

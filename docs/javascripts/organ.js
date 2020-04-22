@@ -26,8 +26,8 @@ class Organ {
   makeOscillator() {
     let oscillator = this.context.createOscillator();
     oscillator.connect(this.gainNode);
-    oscillator.setPeriodicWave(this.wave);
-    // oscillator.type = 'square'
+    // oscillator.setPeriodicWave(this.wave);
+    oscillator.type = 'square';
     return oscillator;
   }
 
@@ -42,28 +42,36 @@ class Organ {
     let beat = 0.25;
     let now = this.context.currentTime;
     let offset = 0
-    for (let [i, note] of Object.entries(notes.split(' '))) {
+    for (let note of notes.split(/ +/)) {
+      note = note.trim();
       let hold = beat;
       let pause = 0;
       if ((/-$/).test(note)) {
-        pause = beat;
-        note = note.slice(0,-1);
+        let h = note.match(/(-+)$/)[1].length;
+        pause = beat * h;
+        note = note.slice(0,-h);
       }
-      if ((/\+$/).test(note)) {
-        hold *= 2;
-        note = note.slice(0,-1);
+      if ((/\++$/).test(note)) {
+        let h = note.match(/(\++)$/)[1].length;
+        hold += (hold * h);
+        note = note.slice(0,-h);
       }
       this.playNote(note, now + offset, hold);
       offset += beat + pause + (hold - beat);
     }
     setTimeout(() => {
       this.context.close();
-    }, offset * 1000)
+    }, (offset * 1000) + 500)
   }
   freq(note) {
+    let sharp = 0;
+    if ((/#$/).test(note)) {
+      sharp = 1;
+      note = note.slice(0,-1);
+    }
     let [l, x] = note.split('');
     x = Number(x);
-    let n = (x * 12) + notes[l.toUpperCase()];
+    let n = (x * 12) + notes[l.toUpperCase()] + sharp;
     const a4 = 58;
     n = n - a4;
     return f0 * (a ** n);
@@ -72,7 +80,14 @@ class Organ {
   static ballGame() {
     let context = new (self.AudioContext || self.webkitAudioContext)();
     let organ = new Organ(context);
-    organ.play("c4- c5 a4 g4 e4 g4+- d4+ c4- c5 a4 g4 e4 g4+-")
+    organ.play(`c4- c5 a4 g4 e4 g4+- d4+-
+                c4- c5 a4 g4 e4 g4++-
+                a4 g4# a4 e4 f4 g4 a4+ f4 d4+-
+                a4- a4 a4 b4 c5 d5 b4 a4 g4 e4 d4
+                c4- c5 a4 g4 e4 g4+- d4- d4
+                c4- d4 e4 f4 g4 a4+- a4 a4 b4
+                c5+- c5+- c5 b4 a4 g4 f4# g4
+                a4+- b4+- c5++`)
   }
 }
 

@@ -31,13 +31,35 @@ class Organ {
     return oscillator;
   }
 
-  play(note, time, hold=0.25) {
+  playNote(note, time, hold=0.25) {
     let oscillator = this.makeOscillator();
     oscillator.frequency.value = this.freq(note);
     oscillator.start(time);
     oscillator.stop(time + hold);
   }
 
+  play(notes) {
+    let beat = 0.25;
+    let now = this.context.currentTime;
+    let offset = 0
+    for (let [i, note] of Object.entries(notes.split(' '))) {
+      let hold = beat;
+      let pause = 0;
+      if ((/-$/).test(note)) {
+        pause = beat;
+        note = note.slice(0,-1);
+      }
+      if ((/\+$/).test(note)) {
+        hold *= 2;
+        note = note.slice(0,-1);
+      }
+      this.playNote(note, now + offset, hold);
+      offset += beat + pause + (hold - beat);
+    }
+    setTimeout(() => {
+      this.context.close();
+    }, offset * 1000)
+  }
   freq(note) {
     let [l, x] = note.split('');
     x = Number(x);
@@ -50,17 +72,7 @@ class Organ {
   static ballGame() {
     let context = new (self.AudioContext || self.webkitAudioContext)();
     let organ = new Organ(context);
-    let now = context.currentTime;
-    organ.play("C4", now);
-    organ.play("C5", now + 0.5);
-    organ.play("A4", now + 0.75);
-    organ.play("G4", now + 1);
-    organ.play("E4", now + 1.25);
-    organ.play("G4", now + 1.5, 0.5);
-    organ.play("D4", now + 2.25, 0.5);
-    setTimeout(() => {
-      context.close();
-    }, 3000)
+    organ.play("c4- c5 a4 g4 e4 g4+- d4+ c4- c5 a4 g4 e4 g4+-")
   }
 }
 

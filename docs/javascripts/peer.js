@@ -1,8 +1,7 @@
 import {noop, chunkParam, unChunkParam, logger, empty} from './utils.js'
-// import {test, roll, test2} from './dice.js'
 import Game from './game.js';
 import Die from './die.js';
-import Team from './team.js';
+import Organ from './organ.js';
 
 const sdpConstraints = { optional: [{RtpDataChannels: true}] };
 const configuration = { iceServers: [{
@@ -239,4 +238,5 @@ document.addEventListener('DOMContentLoaded', async (e) => {
     updateScoreboard(game);
     document.querySelector('#info').textContent = game.inningTitle;
   })
+  document.querySelector('svg').addEventListener('click', Organ.ballGame);
 })

@@ -29,15 +29,11 @@ class Organ {
     this.oscillator.setPeriodicWave(wave);
   }
 
-  play(note, time) {
+  play(note, time, hold=0.25) {
     this.init();
     this.oscillator.frequency.value = this.freq(note);
     this.oscillator.start(time);
-    this.stop(time);
-  }
-
-  stop(time) {
-    this.oscillator.stop(time + 0.25);
+    this.oscillator.stop(time + hold);
   }
 
   freq(note) {
@@ -50,7 +46,7 @@ class Organ {
   }
 
   static ballGame() {
-    let context = new (window.AudioContext || window.webkitAudioContext)();
+    let context = new (self.AudioContext || self.webkitAudioContext)();
     let organ = new Organ(context);
     let now = context.currentTime;
     organ.play("C4", now);
@@ -58,8 +54,8 @@ class Organ {
     organ.play("A4", now + 0.75);
     organ.play("G4", now + 1);
     organ.play("E4", now + 1.25);
-    organ.play("G4", now + 1.5);
-    organ.play("D4", now + 2);
+    organ.play("G4", now + 1.5, 0.5);
+    organ.play("D4", now + 2.25);
   }
 }
 

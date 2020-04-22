@@ -14,26 +14,28 @@ class Organ {
 
   constructor(context) {
     this.context = context;
-  }
-
-  init() {
-    this.oscillator = this.context.createOscillator();
+    this.gainNode = this.context.createGain();
+    this.gainNode.gain.value = 0.05;
+    this.gainNode.connect(this.context.destination);
     // https://github.com/lukehorvat/web-audio-oscillators/blob/master/lib/organ.js
     const imag = [0,1,1,1,1,0,1,0,1,0,0,0,1];
     const real = imag.map(() => 0);
-    let gainNode = this.context.createGain();
-    gainNode.gain.value = 0.05;
-    this.oscillator.connect(gainNode);
-    gainNode.connect(this.context.destination);
-    const wave = this.context.createPeriodicWave(Float32Array.from(real), Float32Array.from(imag));
-    this.oscillator.setPeriodicWave(wave);
+    this.wave = this.context.createPeriodicWave(Float32Array.from(real), Float32Array.from(imag));
+  }
+
+  makeOscillator() {
+    let oscillator = this.context.createOscillator();
+    oscillator.connect(this.gainNode);
+    oscillator.setPeriodicWave(this.wave);
+    // oscillator.type = 'square'
+    return oscillator;
   }
 
   play(note, time, hold=0.25) {
-    this.init();
-    this.oscillator.frequency.value = this.freq(note);
-    this.oscillator.start(time);
-    this.oscillator.stop(time + hold);
+    let oscillator = this.makeOscillator();
+    oscillator.frequency.value = this.freq(note);
+    oscillator.start(time);
+    oscillator.stop(time + hold);
   }
 
   freq(note) {

@@ -23,11 +23,12 @@ const results = [
 ]
 
 class Game {
-  constructor() {
+  constructor(inningCount=9) {
     this.homeTeam = new Team('Home');
     this.awayTeam = new Team('Away');
     this.innings = [];
-    for (let i=0; i<=17; i++) {
+    this.inningCount = inningCount;
+    for (let i=0; i<=(inningCount*2-1); i++) {
       let inning = new Inning();
       this.innings.push(inning);
     }
@@ -36,8 +37,13 @@ class Game {
 
   nextInning() {
     this._currentInning++;
+    if (this.inningNumber > this.inningCount || (this.inningNumber === this.inningCount && this.bottomOfInning && (this.homeTeam.totalRuns > this.awayTeam.totalRuns))) {
+      let evt = new CustomEvent('gameOver');
+      self.dispatchEvent(evt);
+    } else {
     let evt = new CustomEvent('inningChange');
     self.dispatchEvent(evt);
+  }
   }
 
   get currentTeam() {
@@ -46,6 +52,10 @@ class Game {
 
   get topOfInning() {
     return this._currentInning % 2 === 0;
+  }
+
+  get bottomOfInning() {
+    return !this.topOfInning;
   }
 
   get inningNumber() {

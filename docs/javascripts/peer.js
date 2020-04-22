@@ -130,7 +130,9 @@ const updateScoreboard = (game) => {
   //
   let t = game.topOfInning ? 'a' : 'h';
   let id = `#${t}${game.inningNumber}`
+  if (game.currentInning) {
   document.querySelector(id).textContent = game.currentInning.runs;
+}
 }
 
 const updateBatter = (game) => {
@@ -141,14 +143,20 @@ const updateBatter = (game) => {
   document.querySelector('#batter #bats').textContent = batter.atBats.join(", ");
 }
 window.addEventListener('inningChange', () => {
-  document.querySelector('#info').animate({
+  let keyFrame = {
     transform: ["scale(1)", "scale(3)", "scale(1)"],
-  },
-  {
+  }
+  let options = {
     easing: "ease-in-out", duration: 2000
   }
-)
+  document.querySelector('#info').animate(keyFrame, options)
 });
+let gameOver = false;
+window.addEventListener('gameOver', () => {
+  document.querySelector('svg').classList.add('gameover');
+  gameOver = true;
+  document.querySelector('button#roll').textContent = 'New Game?'
+})
 document.addEventListener('DOMContentLoaded', async (e) => {
   let button = document.querySelector('#create');
   button.addEventListener('click', createOfferSDP);
@@ -206,6 +214,10 @@ document.addEventListener('DOMContentLoaded', async (e) => {
   let roller = document.querySelector('button#roll');
   let div = document.querySelector('div#roll-result');
   roller.addEventListener('click', (e) => {
+    if (gameOver) {
+      window.location.reload();
+      return;
+    }
     roller.disabled = true;
     let roll = game.roll();
     roll.forEach((number, i) => {
@@ -240,7 +252,11 @@ document.addEventListener('DOMContentLoaded', async (e) => {
     }
     //update scoreboard
     updateScoreboard(game);
+    try {
     document.querySelector('#info').textContent = game.inningTitle;
+    } catch (e) {
+      //game is probably over
+    }
   })
   document.querySelector('svg').addEventListener('click', Organ.ballGame);
 })

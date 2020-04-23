@@ -1,7 +1,7 @@
 import Die from './die.js';
 import Team from './team.js';
 import Inning from './inning.js';
-import {logger} from './utils.js'
+import Organ from './organ.js';
 
 const results = [
   'HBP',//3
@@ -95,6 +95,7 @@ class Game {
         advance = 3;
         break;
       case 'HR':
+        Organ.charge();
         advance = 4;
         break;
       case 'SAC':

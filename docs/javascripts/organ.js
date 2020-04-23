@@ -84,6 +84,12 @@ class Organ {
                 c5+- c5+- c5 b4 a4 g4 f4# g4
                 a4+- b4+- c5++`)
   }
+
+  static charge() {
+    let context = new (self.AudioContext || self.webkitAudioContext)();
+    let organ = new Organ(context);
+    organ.play(`g3 c4 e4 g4- e4 g4+`);
+  }
 }
 
 export default Organ;

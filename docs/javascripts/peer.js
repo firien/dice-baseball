@@ -232,7 +232,7 @@ document.addEventListener('DOMContentLoaded', async (e) => {
     let bottom = getComputedStyle(roller).bottom;
     let calc = `calc(-100% - (${bottom} * 2))`;
     let animation = div.animate({
-        transform: ["translateY(0)", `translateY(${calc})`, `translateY(${calc})`, , "translateY(0)"],
+        transform: ["translateY(0)", `translateY(${calc})`, `translateY(${calc})`, "translateY(0)"],
         offset: [0, .2, 0.8, 1]
       },
       { easing: "ease-in-out", fill: 'forwards', duration: 2000

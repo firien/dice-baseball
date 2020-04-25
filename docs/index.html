@@ -15,8 +15,8 @@
     <link rel="apple-touch-icon" sizes="512x512" href="images/icon-512.png">
     <link rel="stylesheet" href="stylesheets/index.css">
     <!-- scripts-->
+    <script src="javascripts/index.js" type="module"></script>
     <script src="javascripts/peer.js" type="module"></script>
-    <script src="javascripts/game.js" type="module"></script>
   </head>
   <body>
     <noscript>
@@ -36,100 +36,122 @@
       <button type="submit">Answer</button>
     </form>
     <div id="messages"></div>
+    <div id="console"></div>
     </div>
-    <div id="scoreboard">
-      <div id="info">1↑ 0 OUTS</div>
-      <div id="hit">H</div>
-      <div id="run">R</div>
-      <div id="home-team">Home</div>
-      <div id="home-hits">0</div>
-      <div id="home-runs">0</div>
-      <div id="away-team" class="atbat">Away</div>
-      <div id="away-hits">0</div>
-      <div id="away-runs">0</div>
-      <div id="innings">
-        <div>1</div>
-        <div>2</div>
-        <div>3</div>
-        <div>4</div>
-        <div>5</div>
-        <div>6</div>
-        <div>7</div>
-        <div>8</div>
-        <div>9</div>
-        <div id="a1"></div>
-        <div id="a2"></div>
-        <div id="a3"></div>
-        <div id="a4"></div>
-        <div id="a5"></div>
-        <div id="a6"></div>
-        <div id="a7"></div>
-        <div id="a8"></div>
-        <div id="a9"></div>
-        <div id="h1"></div>
-        <div id="h2"></div>
-        <div id="h3"></div>
-        <div id="h4"></div>
-        <div id="h5"></div>
-        <div id="h6"></div>
-        <div id="h7"></div>
-        <div id="h8"></div>
-        <div id="h9"></div>
+    <div id="x-snap">
+      <div id="menu" class="flex vertical">
+        <h1>Dice Baseball</h1>
+        <input type="checkbox">
+        <label>Music</label>
+        <input type="checkbox">
+        <label>Effects</label>
+        <h2>Single Player</h2>
+        <button>Resume Game</button>
+        <button id="new-single-game">New Game</button>
+        <h2>Multi Player</h2>
+        <button disabled>Peer to Peer</button>
+      </div>
+      <div id="board">
+        <div id="scoreboard">
+          <div id="info">1↑ 0 OUTS</div>
+          <div id="hit">H</div>
+          <div id="run">R</div>
+          <div id="home-team">Home</div>
+          <div id="home-hits">0</div>
+          <div id="home-runs">0</div>
+          <div id="away-team" class="atbat">Away</div>
+          <div id="away-hits">0</div>
+          <div id="away-runs">0</div>
+          <div id="innings">
+            <div>1</div>
+            <div>2</div>
+            <div>3</div>
+            <div>4</div>
+            <div>5</div>
+            <div>6</div>
+            <div>7</div>
+            <div>8</div>
+            <div>9</div>
+            <div id="a1"></div>
+            <div id="a2"></div>
+            <div id="a3"></div>
+            <div id="a4"></div>
+            <div id="a5"></div>
+            <div id="a6"></div>
+            <div id="a7"></div>
+            <div id="a8"></div>
+            <div id="a9"></div>
+            <div id="h1"></div>
+            <div id="h2"></div>
+            <div id="h3"></div>
+            <div id="h4"></div>
+            <div id="h5"></div>
+            <div id="h6"></div>
+            <div id="h7"></div>
+            <div id="h8"></div>
+            <div id="h9"></div>
+          </div>
+        </div>    
+        <svg viewBox='16 32 96 96' xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+          <defs>
+            <pattern id="lawnmower" patternUnit="userSpaceOnUse" height=".125" width=".25">
+              <rect x="0" y="0" height="16" width="2"  shape-rendering="crispEdges" stroke="none" fill="#468944"/>
+              <rect x="2" y="0" height="16" width="2"  shape-rendering="crispEdges" stroke="none" fill="#3B8039"/>
+              <rect x="4" y="0" height="16" width="2"  shape-rendering="crispEdges" stroke="none" fill="#468944"/>
+              <rect x="6" y="0" height="16" width="2"  shape-rendering="crispEdges" stroke="none" fill="#3B8039"/>
+              <rect x="8" y="0" height="16" width="2"  shape-rendering="crispEdges" stroke="none" fill="#468944"/>
+              <rect x="10" y="0" height="16" width="2" shape-rendering="crispEdges" stroke="none" fill="#3B8039"/>
+              <rect x="12" y="0" height="16" width="2" shape-rendering="crispEdges" stroke="none" fill="#468944"/>
+              <rect x="14" y="0" height="16" width="2" shape-rendering="crispEdges" stroke="none" fill="#3B8039"/>
+              <rect x="16" y="0" height="16" width="2" shape-rendering="crispEdges" stroke="none" fill="#468944"/>
+              <rect x="18" y="0" height="16" width="2" shape-rendering="crispEdges" stroke="none" fill="#3B8039"/>
+              <rect x="20" y="0" height="16" width="2" shape-rendering="crispEdges" stroke="none" fill="#468944"/>
+              <rect x="22" y="0" height="16" width="2" shape-rendering="crispEdges" stroke="none" fill="#3B8039"/>
+              <rect x="24" y="0" height="16" width="2" shape-rendering="crispEdges" stroke="none" fill="#468944"/>
+              <rect x="26" y="0" height="16" width="2" shape-rendering="crispEdges" stroke="none" fill="#3B8039"/>
+              <rect x="28" y="0" height="16" width="2" shape-rendering="crispEdges" stroke="none" fill="#468944"/>
+              <rect x="30" y="0" height="16" width="2" shape-rendering="crispEdges" stroke="none" fill="#3B8039"/>
+            </pattern>
+          </defs>
+          <rect class="field" x="0" y="0" width="128" height="128" fill="url(#lawnmower)"/>
+          <!-- <path fill="red" d="M 64 120 l 40 -40 c -20 -30 -60 -30 -80 0z"/> -->
+          <!-- <path class="infield" transform="rotate(-45 64 120)" d="M 64 120 h 56 c 20 -30 -26 -76 -56 -56z"/> -->
+          <g transform="rotate(-45 64 120)"> 
+            <path class="infield" d="M 64 120 h 56 c 6 -40 -16 -62 -56 -56z
+                M 72 116 a 4 4 0 0 0 -4 -4 v -20 a 4 4 0 0 0 4 -4 h 20 a 4 4 0 0 0 4 4 v 20 a 4 4 0 0 0 -4 4z"/>
+            <path class="line" d="M 66 0 V 118 h 120"/>
+            <rect class="base" data-base="1" x="95" y="115" width="3" height="3"/>
+            <rect class="base" data-base="2" x="95" y="86" width="3" height="3"/>
+            <rect class="base" data-base="3" x="66" y="86" width="3" height="3"/>
+          </g>
+          <rect x="0" y="0" height="8" width="8" fill="lightgreen"/>
+          <rect x="8" y="0" height="8" width="8" fill="darkgreen"/>
+        </svg>
+        <div id="batter">
+          <div id="name">Player 1</div>
+          <div id="stat">0 for 0</div>
+          <div id="bats"></div>
+        </div>
+        <button id="roll" type="button">Roll</button>
+        <div id="roll-result">
+          <div class="die">P</div>
+          <div class="die">L</div>
+          <div class="die">G</div>
+          <div id="outcome"></div>
+        </div>
+        <div id="runners">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+      </div>
+      <div id="home">
+        <h2>Home Team</h2> 
+      </div>
+      <div id="away">
+        <h2>Away Team</h2> 
       </div>
     </div>
-    <svg viewBox='16 32 96 96' xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-      <defs>
-        <pattern id="lawnmower" patternUnit="userSpaceOnUse" height=".125" width=".25">
-          <rect x="0" y="0" height="16" width="2"  shape-rendering="crispEdges" stroke="none" fill="#468944"/>
-          <rect x="2" y="0" height="16" width="2"  shape-rendering="crispEdges" stroke="none" fill="#3B8039"/>
-          <rect x="4" y="0" height="16" width="2"  shape-rendering="crispEdges" stroke="none" fill="#468944"/>
-          <rect x="6" y="0" height="16" width="2"  shape-rendering="crispEdges" stroke="none" fill="#3B8039"/>
-          <rect x="8" y="0" height="16" width="2"  shape-rendering="crispEdges" stroke="none" fill="#468944"/>
-          <rect x="10" y="0" height="16" width="2" shape-rendering="crispEdges" stroke="none" fill="#3B8039"/>
-          <rect x="12" y="0" height="16" width="2" shape-rendering="crispEdges" stroke="none" fill="#468944"/>
-          <rect x="14" y="0" height="16" width="2" shape-rendering="crispEdges" stroke="none" fill="#3B8039"/>
-          <rect x="16" y="0" height="16" width="2" shape-rendering="crispEdges" stroke="none" fill="#468944"/>
-          <rect x="18" y="0" height="16" width="2" shape-rendering="crispEdges" stroke="none" fill="#3B8039"/>
-          <rect x="20" y="0" height="16" width="2" shape-rendering="crispEdges" stroke="none" fill="#468944"/>
-          <rect x="22" y="0" height="16" width="2" shape-rendering="crispEdges" stroke="none" fill="#3B8039"/>
-          <rect x="24" y="0" height="16" width="2" shape-rendering="crispEdges" stroke="none" fill="#468944"/>
-          <rect x="26" y="0" height="16" width="2" shape-rendering="crispEdges" stroke="none" fill="#3B8039"/>
-          <rect x="28" y="0" height="16" width="2" shape-rendering="crispEdges" stroke="none" fill="#468944"/>
-          <rect x="30" y="0" height="16" width="2" shape-rendering="crispEdges" stroke="none" fill="#3B8039"/>
-        </pattern>
-      </defs>
-      <rect class="field" x="0" y="0" width="128" height="128" fill="url(#lawnmower)"/>
-      <!-- <path fill="red" d="M 64 120 l 40 -40 c -20 -30 -60 -30 -80 0z"/> -->
-      <!-- <path class="infield" transform="rotate(-45 64 120)" d="M 64 120 h 56 c 20 -30 -26 -76 -56 -56z"/> -->
-      <g transform="rotate(-45 64 120)"> 
-        <path class="infield" d="M 64 120 h 56 c 6 -40 -16 -62 -56 -56z
-            M 72 116 a 4 4 0 0 0 -4 -4 v -20 a 4 4 0 0 0 4 -4 h 20 a 4 4 0 0 0 4 4 v 20 a 4 4 0 0 0 -4 4z"/>
-        <path class="line" d="M 66 0 V 118 h 120"/>
-        <rect class="base" data-base="1" x="95" y="115" width="3" height="3"/>
-        <rect class="base" data-base="2" x="95" y="86" width="3" height="3"/>
-        <rect class="base" data-base="3" x="66" y="86" width="3" height="3"/>
-      </g>
-      <rect x="0" y="0" height="8" width="8" fill="lightgreen"/>
-      <rect x="8" y="0" height="8" width="8" fill="darkgreen"/>
-
-    </svg>
-    <div id="console"></div>
-    <div id="batter">
-      <div id="name">Player 1</div>
-      <div id="stat">0 for 0</div>
-      <div id="bats"></div>
-    </div>
-    <button id="roll" type="button">Roll</button>
-    <div id="roll-result">
-      <div class="die">P</div>
-      <div class="die">L</div>
-      <div class="die">G</div>
-      <div id="outcome"></div>
-    </div>
-    <div id="runners">
-      <span></span>
-      <span></span>
-      <span></span>
-    </div>
+    <div id="indicator">■○○○</div>
   </body>
 </html>

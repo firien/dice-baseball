@@ -131,8 +131,8 @@ const updateScoreboard = (game) => {
   let t = game.topOfInning ? 'a' : 'h';
   let id = `#${t}${game.inningNumber}`
   if (game.currentInning) {
-  document.querySelector(id).textContent = game.currentInning.runs;
-}
+    document.querySelector(id).textContent = game.currentInning.runs;
+  }
 }
 
 const updateBatter = (game) => {
@@ -193,22 +193,6 @@ document.addEventListener('DOMContentLoaded', async (e) => {
       formChat.reset();
     }
   })
-
-  for (let base=1; base<=3; base++) {
-    let rect = document.querySelector(`rect[data-base='${base}']`);
-    let box = rect.getBoundingClientRect();
-    let span = document.querySelector(`#runners span:nth-child(${base})`)
-    if (base === 1) {
-      span.style.top = `${box.bottom + 15}px`;
-      span.style.left = `${box.x + 15}px`;
-    } else if (base === 2) {
-      span.style.top = `${box.top - 40}px`;
-      span.style.left = '50%';
-    } else {
-      span.style.right = `${window.innerWidth - box.x}px`;
-      span.style.top = `${box.bottom + 15}px`;
-    }
-  }
   
   let game = new Game();
   let roller = document.querySelector('button#roll');
@@ -231,9 +215,10 @@ document.addEventListener('DOMContentLoaded', async (e) => {
     // let calc = "calc(-100% - env(safe-area-inset-bottom))";
     let bottom = getComputedStyle(roller).bottom;
     let calc = `calc(-100% - (${bottom} * 2))`;
+    calc = `-100%`;
     let animation = div.animate({
         transform: ["translateY(0)", `translateY(${calc})`, `translateY(${calc})`, "translateY(0)"],
-        offset: [0, .2, 0.8, 1]
+        offset: [0, 0.2, 0.8, 1]
       },
       { easing: "ease-in-out", fill: 'forwards', duration: 2000
     });
@@ -253,7 +238,7 @@ document.addEventListener('DOMContentLoaded', async (e) => {
     //update scoreboard
     updateScoreboard(game);
     try {
-    document.querySelector('#info').textContent = game.inningTitle;
+      document.querySelector('#info').textContent = game.inningTitle;
     } catch (e) {
       //game is probably over
     }

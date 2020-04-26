@@ -16,7 +16,7 @@ const defaultTeam = (name, teamStore, playerStore) => {
   team.uuid = generateUUID();
   let request = teamStore.add(team);
   request.onsuccess = (e) => {
-    let teamId = e.target.result;
+    let teamId = team.uuid;
     for (let i=0; i<9; i++) {
       let player = new Player(`Player ${i+1}`)
       player.uuid = generateUUID();

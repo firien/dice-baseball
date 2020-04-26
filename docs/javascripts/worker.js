@@ -1,5 +1,6 @@
 import Team from './team.js'
 import Player from './player.js';
+import { generateUUID } from './utils.js';
 
 let database;
 /*
@@ -46,29 +47,6 @@ const open = (data) => {
     database = request.result;
     postMessage({promiseId: data.promiseId, status: 201})
   }
-}
-
-const generateUUID = () => {
-  let array = new Uint8Array(16);
-  self.crypto.getRandomValues(array);
-  // debugger
-  // lifted from Ruby SecureRandom::uuid
-  // array = [223, 113, 86, 88, 40, 243, 24, 189, 137, 133, 40, 220, 178, 217, 161, 12]
-  array = Array.from(array);
-  let a = ((array[6] << 8) + array[7]) & 0x0fff | 0x4000;
-  array[6] = a >> 8;
-  array[7] = a - (array[6] << 8);
-  let b = ((array[8] << 8) + array[9]) & 0x3fff | 0x8000;
-  array[8] = b >> 8;
-  array[9] = b - (array[8] << 8);
-  const dashIndices = [3,5,7,9];
-  return array.map((x,i) => {
-    let str = x.toString(16);
-    if (str.length === 1) {
-      str = `0${str}`;
-    }
-    return dashIndices.includes(i) ? `${str}-` : str;
-  }).join('');
 }
 
 export const sendMessage = () => {

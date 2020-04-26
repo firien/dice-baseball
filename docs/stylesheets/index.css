@@ -25,6 +25,8 @@
   padding: 0;
   touch-action: manipulation;
   box-sizing: border-box;
+  color: var(--text-color);
+  background-color: var(--background-color);
 }
 
 .hidden {
@@ -34,7 +36,10 @@
 body {
   margin-left: env(safe-area-inset-left);
   margin-right: env(safe-area-inset-right);
-  /* height: 200vh; */
+}
+
+button:disabled {
+  color: var(--secondary-background-color);
 }
 
 noscript div {
@@ -362,6 +367,9 @@ ol#rules {
   padding: 2em;
 }
 
+summary:focus {
+  outline: none;
+}
 #menu details {
   margin-bottom: calc(2em + env(safe-area-inset-bottom));
 }

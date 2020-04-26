@@ -53,20 +53,9 @@ if ('serviceWorker' in navigator) {
       })
     })
   })
-}
-
-//ios homescreen check
-if ('standalone' in navigator) {
-  if (!navigator.standalone) {
-    let button = document.querySelector('#pwa');
-    button.classList.remove('hidden');
-    document.addEventListener('click', (e) => {
-      navigator.share({
-        title: document.title,
-        url: window.location,
-      });
-    })
-  }
+  navigator.serviceWorker.addEventListener('controllerchange', (e) => {
+    window.location.reload();
+  })
 }
 
 const updateScoreboard = (game) => {
@@ -217,6 +206,22 @@ document.addEventListener('DOMContentLoaded', async (e) => {
     }
   })
   document.querySelector('svg').addEventListener('click', Organ.ballGame);
+
+  //ios homescreen check
+  if ('standalone' in navigator) {
+    if (navigator.standalone) {
+      document.querySelector('#x-snap').style.setProperty('height', `${window.innerHeight}px`);
+    } else {
+      let button = document.querySelector('#pwa');
+      button.classList.remove('hidden');
+      button.addEventListener('click', (e) => {
+        navigator.share({
+          title: document.title,
+          url: window.location,
+        });
+      })
+    }
+  }
 
 })
 

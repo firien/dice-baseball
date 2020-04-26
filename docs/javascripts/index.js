@@ -1,3 +1,5 @@
+import { sendMessage } from './worker.js';
+
 const positionBaseTags = () => {
   for (let base=1; base<=3; base++) {
     let rect = document.querySelector(`rect[data-base='${base}']`);
@@ -15,7 +17,58 @@ const positionBaseTags = () => {
     }
   }
 }
-document.addEventListener('DOMContentLoaded', (e) => {
+
+// service worker
+if ('serviceWorker' in navigator) {
+  const showUpdateButton = (worker) => {
+    let button = document.querySelector('#updates');
+    button.classList.remove('hidden');
+    const skipWaiting = (e) => {
+      button.disabled = true;
+      if (worker.state === 'activated') {
+        button.classList.add('hidden');
+      } else {
+        worker.postMessage({action: 'skipWaiting'})
+      }
+      button.removeEventListener('click', skipWaiting);
+    }
+    button.addEventListener('click', skipWaiting);
+  }
+  navigator.serviceWorker.register('/dice-baseball/service.js', {scope: '/dice-baseball/'}).then((registration) => {
+    if (registration.waiting) {
+      showUpdateButton(registration.waiting)
+    }
+    registration.addEventListener('updatefound', () => {
+      const newWorker = registration.installing
+      newWorker.addEventListener('statechange', () => {
+        if (newWorker.state === 'installed') {
+          showUpdateButton(newWorker)
+        }
+        if (newWorker.state === 'activated') {
+          document.querySelector('#updates').classList.add('hidden');
+        }
+      })
+    })
+  })
+}
+
+//ios homescreen check
+if ('standalone' in navigator) {
+  if (!navigator.standalone) {
+    let button = document.querySelector('#pwa');
+    button.classList.remove('hidden');
+    document.addEventListener('click', (e) => {
+      navigator.share({
+        title: document.title,
+        url: window.location,
+      });
+    })
+  }
+}
+
+document.addEventListener('DOMContentLoaded', async (e) => {
+  //web worker
+  let response = await sendMessage('open');
   let newSingleGame = document.querySelector('#new-single-game');
   newSingleGame.addEventListener('click', (e) => {
     let width = window.innerWidth;
@@ -44,7 +97,8 @@ document.addEventListener('DOMContentLoaded', (e) => {
             text = "\u25A0\u25CB\u25CB\u25CB"
             break;
           case 'board':
-            positionBaseTags();
+            // allow a little time for snap scrolling to finalize
+            setTimeout(positionBaseTags, 250);
             text = "\u25A1\u25CF\u25CB\u25CB"
             break;
           case 'home':

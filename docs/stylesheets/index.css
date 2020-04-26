@@ -12,6 +12,12 @@
     --tertiary-background-color: rgb(35,32,26);
   }
 }
+@font-face {
+  font-family: "Baseball";
+  src: url('/dice-baseball/fonts/font.ttf') format('truetype'),
+       url('/dice-baseball/fonts/font.woff2') format('woff2'),
+       url(/dice-baseball/fonts/font.svg#baseball) format('svg');
+}
 
 * {
   font-family: -apple-system, Helvetica;
@@ -28,6 +34,7 @@
 body {
   margin-left: env(safe-area-inset-left);
   margin-right: env(safe-area-inset-right);
+  /* height: 200vh; */
 }
 span.sent {
   flex: 0 0 auto;
@@ -129,6 +136,9 @@ form#answer.hidden {
     transform: scale(0.8);
     filter: blur(0.2em);
   }
+  div#indicator {
+    display: none;
+  }
 }
 @media screen and (max-width: 500px) {
   #x-snap {
@@ -156,6 +166,16 @@ form#answer.hidden {
     letter-spacing: 1em;
     text-align: center;
     color: #222;
+    background-color: var(--background-color);
+  }
+  #home, #away h2 {
+    font-family: Baseball;
+  }
+  #x-snap #menu {
+    overflow-y: auto;
+  }
+  #menu button {
+    flex: 0 0 auto;
   }
 }
 
@@ -311,4 +331,18 @@ button#roll {
 }
 .vertical {
   flex-direction: column;
+}
+
+ol#rules {
+  padding: 2em;
+}
+
+#menu details {
+  margin-bottom: calc(2em + env(safe-area-inset-bottom));
+}
+#banners {
+  position: -webkit-sticky;
+  position: sticky;
+  bottom: calc(2em + env(safe-area-inset-bottom));
+  background-color: var(--background-color);
 }

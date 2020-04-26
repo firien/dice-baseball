@@ -36,6 +36,21 @@ body {
   margin-right: env(safe-area-inset-right);
   /* height: 200vh; */
 }
+
+noscript div {
+  position: fixed;
+  top: 0.5em;
+  width: calc(100% - 2em);
+  z-index: 5;
+  border-radius: 0.3em;
+  border: thin solid sienna;
+  background-color: orangered;
+  padding: 1em;
+  text-align: center;
+  margin: 1em;
+  color: white;
+  font-weight: bold;
+}
 span.sent {
   flex: 0 0 auto;
   align-self: flex-end;

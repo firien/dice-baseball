@@ -5,7 +5,7 @@ class Team {
     this.name = name;
     this.players = [];
     for (let i=1; i<=9; i++) {
-      let player = new Player();
+      let player = new Player('df');
       player.order = i;
       if (i === 1) {
         player.base = 0;

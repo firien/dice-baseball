@@ -1,5 +1,6 @@
 class Player {
-  constructor() {
+  constructor(name) {
+    this.name = name;
     this.base = null;
     this.runs = 0;
     this.position;
@@ -7,9 +8,9 @@ class Player {
     this.atBats = [];
   }
 
-  get name() {
-    return `Player ${this.order}`;
-  }
+  // get name() {
+  //   return `Player ${this.order}`;
+  // }
 
   get stats() {
     return `${this.hitCount} for ${this.atBatCount}`;

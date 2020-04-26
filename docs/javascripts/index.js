@@ -210,6 +210,8 @@ document.addEventListener('DOMContentLoaded', async (e) => {
   //ios homescreen check
   if ('standalone' in navigator) {
     if (navigator.standalone) {
+      // iOS includes top status bar in 100vh calc
+      // so, correct it with innerHeight
       document.querySelector('#x-snap').style.setProperty('height', `${window.innerHeight}px`);
     } else {
       let button = document.querySelector('#pwa');

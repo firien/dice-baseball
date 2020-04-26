@@ -89,17 +89,19 @@ form#chat button {
   flex: 1 1 20%;
 }
 
-input, button {
+input, button, a.button {
   font-size: 1rem;
   -webkit-appearance: none;
   appearance: none;
   border: thin solid grey;
 }
-button {
+button, a.button {
   border-radius: 0.3em;
   background-color: #eee;
 }
-
+a {
+  text-decoration: none;
+}
 form#answer {
   width: 100vw;
   max-width: 400px;
@@ -126,10 +128,15 @@ form#answer.hidden {
   overflow-y: hidden;
   overflow-x: hidden;
 }
-#menu button {
+#menu button, #menu a.button {
   margin: 1em;
   width: calc(100% - 2em);
   padding: 0.5em 0;
+}
+#menu a.button {
+  display: block;
+  color: var(--text-color);
+  text-align: center;
 }
 @media screen and (min-width: 500px) {
   #menu {
@@ -175,13 +182,14 @@ form#answer.hidden {
   }
   div#indicator {
     position: fixed;
-    bottom: max(0.5em, env(safe-area-inset-bottom));
+    bottom: env(safe-area-inset-bottom);
     left: 0;
     width: 100%;
     letter-spacing: 1em;
     text-align: center;
     color: #222;
     background-color: var(--background-color);
+    padding-bottom: 0.5em;
   }
   #home, #away h2 {
     font-family: Baseball;
@@ -251,6 +259,8 @@ rect.base.occupied {
   backdrop-filter: blur(0.3em);
   background-color: rgba(255, 255, 255, 0.3);
   padding-bottom: calc(2em + env(safe-area-inset-bottom));
+  z-index: 8;
+  border-top: thin solid black;
 }
 button#roll {
   bottom: calc(2em + env(safe-area-inset-bottom));

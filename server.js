@@ -34,6 +34,8 @@ http.createServer((request, response) => {
         mime = "application/manifest+json"
       } else if  ((/json$/).test(filePath)) {
         mime = "application/json"
+      } else if  ((/pdf$/).test(filePath)) {
+        mime = "application/pdf"
       } else {
         mime = 'text/plain'
       }

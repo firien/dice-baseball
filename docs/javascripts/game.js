@@ -24,8 +24,6 @@ const results = [
 
 class Game {
   constructor(inningCount=9) {
-    this.homeTeam = new Team('Home');
-    this.awayTeam = new Team('Away');
     this.innings = [];
     this.inningCount = inningCount;
     for (let i=0; i<=(inningCount*2-1); i++) {
@@ -168,6 +166,13 @@ class Game {
     return [Die.roll(), Die.roll(), Die.roll()];
   }
 
+  serialize() {
+    return {
+      uuid: this.uuid,
+      homeTeamUUID: this.homeTeamUUID,
+      homeAwayUUID: this.homeAwayUUID,
+    }
+  }
 }
 
 export default Game;

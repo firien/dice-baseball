@@ -8,9 +8,11 @@ class Player {
     this.atBats = [];
   }
 
-  // get name() {
-  //   return `Player ${this.order}`;
-  // }
+  static from(params) {
+    let player = new Player(params.name);
+    Object.assign(player, params);
+    return player;
+  }
 
   get stats() {
     return `${this.hitCount} for ${this.atBatCount}`;

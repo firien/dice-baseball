@@ -4,14 +4,11 @@ class Team {
   constructor(name) {
     this.name = name;
     this.players = [];
-    for (let i=1; i<=9; i++) {
-      let player = new Player('df');
-      player.order = i;
-      if (i === 1) {
-        player.base = 0;
-      }
-      this.players.push(player);
-    }
+  }
+  static from(params) {
+    let team = new Team(params.name);
+    Object.assign(team, params);
+    return team;
   }
   lineup() {
     return this.players.sort((a,b) => a.order - b.order);
@@ -47,6 +44,12 @@ class Team {
   }
   get totalHits() {
     return this.players.reduce((sum, p) => sum += p.hitCount, 0);
+  }
+  serialize() {
+    return {
+      uuid: this.uuid,
+      name: this.name
+    }
   }
 }
 

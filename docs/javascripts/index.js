@@ -103,13 +103,55 @@ window.addEventListener('gameOver', () => {
   document.querySelector('button#roll').textContent = 'New Game?'
 })
 
+const loadPlayerList = (players, id) => {
+  let form = document.querySelector(`#${id} form`);
+  for (let player of players) {
+    let input = document.createElement('input');
+    input.value = player.name;
+    form.appendChild(input);
+  }
+}
+
+const updateRollResult = (roll, outcome, roller) => {
+  let div = document.querySelector('div#roll-result');
+  roll.forEach((number, i) => {
+    let text = String.fromCharCode(Die.faces[number]);
+    let span = div.querySelector(`.die:nth-child(${i+1})`);
+    span.textContent = text;
+  })
+  document.querySelector('#outcome').textContent = outcome;
+  let animation = div.animate({
+    transform: ["translateY(0)", `translateY(-100%)`, `translateY(-100%)`, "translateY(0)"],
+    offset: [0, 0.2, 0.8, 1]
+  }, {
+    easing: "ease-in-out", fill: 'forwards', duration: 2000
+  });
+  animation.onfinish = () => {
+    roller.disabled = false;
+    // updateBatter(game);
+  };
+}
+
+const updateField = (playersOnBase) => {
+  for (let base=1; base<=3; base++) {
+    let player = playersOnBase[base - 1];
+    let rect = document.querySelector(`rect[data-base='${base}']`);
+    rect.classList.toggle('occupied', !!player);
+    let span = document.querySelector(`#runners span:nth-child(${base})`);
+    span.textContent = player ? player.name : '';
+  }
+}
+
 document.addEventListener('DOMContentLoaded', async (e) => {
   //web worker
-  await sendMessage({url: '/database/open'});
-  // sendMessage({url: '/teams/home'}).then(loadTeam);
+  await sendMessage({url: '/database', method: 'post'});
   // sendMessage({url: '/teams/away'}).then(loadTeam);
   let newSingleGame = document.querySelector('#new-single-game');
-  newSingleGame.addEventListener('click', (e) => {
+  newSingleGame.addEventListener('click', async (e) => {
+    let request = await sendMessage({url: '/games', method: 'post'});
+    loadPlayerList(request.game.homeTeam.players, 'home');
+    loadPlayerList(request.game.awayTeam.players, 'away');
+    document.querySelector('#roll').disabled = false;
     let width = window.innerWidth;
     let container = document.querySelector('#x-snap');
     let x = 0;
@@ -156,56 +198,20 @@ document.addEventListener('DOMContentLoaded', async (e) => {
     observer.observe(element);
   };
 
-  let game = new Game();
   let roller = document.querySelector('button#roll');
-  let div = document.querySelector('div#roll-result');
-  roller.addEventListener('click', (e) => {
-    if (gameOver) {
-      window.location.reload();
-      return;
-    }
+  roller.addEventListener('click', async (e) => {
     roller.disabled = true;
-    let roll = game.roll();
-    roll.forEach((number, i) => {
-      let text = String.fromCharCode(Die.faces[number]);
-      let span = div.querySelector(`.die:nth-child(${i+1})`);
-      span.textContent = text;
-    })
-    let outcome = game.bat(roll);
-    document.querySelector('#outcome').textContent = outcome;
-    // bug: on safari env() is not available in calc
-    // let calc = "calc(-100% - env(safe-area-inset-bottom))";
-    let bottom = getComputedStyle(roller).bottom;
-    let calc = `calc(-100% - (${bottom} * 2))`;
-    calc = `-100%`;
-    let animation = div.animate({
-        transform: ["translateY(0)", `translateY(${calc})`, `translateY(${calc})`, "translateY(0)"],
-        offset: [0, 0.2, 0.8, 1]
-      },
-      { easing: "ease-in-out", fill: 'forwards', duration: 2000
-    });
-    animation.onfinish = () => {
-      roller.disabled = false;
-      //update batter
-      updateBatter(game);
-    };
-    //update field
-    for (let base=1; base<=3; base++) {
-      let player = game.currentTeam.playerOn(base);
-      let rect = document.querySelector(`rect[data-base='${base}']`)
-      rect.classList.toggle('occupied', !!player);
-      let span = document.querySelector(`#runners span:nth-child(${base})`)
-      span.textContent = player ? player.name : '';
-    }
-    //update scoreboard
-    updateScoreboard(game);
+    let response = await sendMessage({url: `/games/roll`, method: 'post'})
+    let { roll, outcome, playersOnBase } = response.result
+    updateRollResult(roll, outcome, roller);
+    updateField(playersOnBase);
+    // updateScoreboard(game);
     try {
       document.querySelector('#info').textContent = game.inningTitle;
     } catch (e) {
       //game is probably over
     }
   })
-  document.querySelector('svg').addEventListener('click', Organ.ballGame);
 
   //ios homescreen check
   if ('standalone' in navigator) {
@@ -235,4 +241,3 @@ mq.addListener((e) => {
     //check game state
   }
 })
-

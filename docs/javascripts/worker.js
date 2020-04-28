@@ -1,9 +1,21 @@
+import Game from './game.js';
 import Team from './team.js'
 import Player from './player.js';
 import { generateUUID } from './utils.js';
 import Router from './router.js';
 
 let database;
+let currentGame;
+
+// good for one and done IDBRequests
+// like add, delete, & put
+const requestPromise = (request) => {
+  return new Promise((resolve, reject) => {
+    request.onsuccess = resolve
+    request.onerror = reject
+  })
+}
+
 /*
 worker in name only
 safari (and firefox?) do not yet support imports on workers
@@ -11,18 +23,21 @@ so this will be run on the main thread
 but it has been written to act like a worker,
 so it can very easily be transferred to a Web Worker when available
 */
-const defaultTeam = (name, teamStore, playerStore) => {
+const defaultTeam = async (name, teamStore, playerStore) => {
   let team = new Team(name);
   team.uuid = generateUUID();
-  let request = teamStore.add(team);
-  request.onsuccess = (e) => {
-    let teamId = team.uuid;
-    for (let i=0; i<9; i++) {
-      let player = new Player(`Player ${i+1}`)
-      player.uuid = generateUUID();
-      player.teamId = teamId;
-      playerStore.add(player);
+  let request = teamStore.add(team.serialize());
+  await requestPromise(request);
+  let teamId = team.uuid;
+  for (let i=0; i<9; i++) {
+    let player = new Player(`Player ${i+1}`)
+    player.order = i + 1;
+    if (i === 0) {
+      player.base = 0;
     }
+    player.uuid = generateUUID();
+    player.teamId = teamId;
+    playerStore.add(player);
   }
 }
 
@@ -45,7 +60,7 @@ const open = (data) => {
     let playerStore;
     if (!database.objectStoreNames.contains('players')) {
       playerStore = database.createObjectStore('players', {keyPath: 'uuid'});
-      playerStore.createIndex('teamId', 'teamId');
+      playerStore.createIndex('team', ['teamId', 'order']);
     }
     if (e.oldVersion < 1) {
       // add default teams
@@ -59,16 +74,51 @@ const open = (data) => {
   }
 }
 
-const teamPlayers = (data, params) => {
-  console.log(data, params);
-  let trxn = database.transaction(['teams'], 'readonly')
-  let store = trxn.objectStore('teams')
-  // let source = store.index('team');
+const teamPlayers = async (source, teamUUID) => {
+  let request = source.getAll(IDBKeyRange.bound([teamUUID, 0], [teamUUID, 10]))
+  let evt = await requestPromise(request);
+  return evt.target.result.map(p => Player.from(p))
+}
+
+const newGame = async (data, params) => {
+  let trxn = database.transaction(['games', 'teams', 'players'], 'readwrite');
+  let store = trxn.objectStore('games');
+  let game = new Game();
+  game.uuid = generateUUID();
+  let request = store.add(game);
+  await requestPromise(request);
+  let teamStore = trxn.objectStore('teams');
+  let teamRequest = await requestPromise(teamStore.getAll());
+  let playerStore = trxn.objectStore('players');
+  let playerSource = playerStore.index('team');
+  game.homeTeam = Team.from(teamRequest.target.result[0]);
+  game.homeTeam.players = await teamPlayers(playerSource, game.homeTeam.uuid)
+  game.awayTeam = Team.from(teamRequest.target.result[1]);
+  game.awayTeam.players = await teamPlayers(playerSource, game.awayTeam.uuid)
+  currentGame = game;
+  postMessage({promiseId: data.promiseId, game, status: 201})
+}
+
+const roll = async (data, params) => {
+  // roll & quickly send out result as an event
+  // this event will trigger pop up animation on main thread
+  // just like a roll from a peer would
+  let roll = currentGame.roll();
+  let outcome = currentGame.bat(roll);
+  let playersOnBase = new Array(3);
+  for (let player of currentGame.currentTeam.players) {
+    if (player.base) {
+      playersOnBase[player.base-1] = player;
+    }
+  }
+  let result = { roll, outcome, playersOnBase };
+  postMessage({promiseId: data.promiseId, result, status: 201})
 }
 
 const router = new Router();
 router.post("/database", open);
-router.get("/teams/:id/players", teamPlayers);
+router.post("/games", newGame);
+router.post("/games/roll", roll);
 
 export const sendMessage = (opts) => {
   let url = new URL(`ww://${opts.url}`)

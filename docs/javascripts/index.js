@@ -58,35 +58,40 @@ if ('serviceWorker' in navigator) {
   })
 }
 
-const updateScoreboard = (game) => {
+const updateScoreboard = (scoreBoard) => {
+  let { homeTeam, awayTeam, topOfInning } = scoreBoard;
   let homeRuns = document.querySelector('#home-runs');
-  homeRuns.textContent = game.homeTeam.totalRuns;
+  homeRuns.textContent = homeTeam.totalRuns;
   let awayRuns = document.querySelector('#away-runs');
-  awayRuns.textContent = game.awayTeam.totalRuns;
+  awayRuns.textContent = awayTeam.totalRuns;
   //hits
   let homeHits = document.querySelector('#home-hits');
-  homeHits.textContent = game.homeTeam.totalHits;
+  homeHits.textContent = homeTeam.totalHits;
   let awayHits = document.querySelector('#away-hits');
-  awayHits.textContent = game.awayTeam.totalHits;
+  awayHits.textContent = awayTeam.totalHits;
   //
-  let top = game.topOfInning;
-  document.querySelector('#home-team').classList.toggle('atbat', !top)
-  document.querySelector('#away-team').classList.toggle('atbat', top)
+  document.querySelector('#home-team').classList.toggle('atbat', !topOfInning)
+  document.querySelector('#away-team').classList.toggle('atbat', topOfInning)
   //
-  let t = game.topOfInning ? 'a' : 'h';
-  let id = `#${t}${game.inningNumber}`
+  return
+  let tag = topOfInning ? 'a' : 'h';
+  let id = `#${tag}${game.inningNumber}`
   if (game.currentInning) {
     document.querySelector(id).textContent = game.currentInning.runs;
   }
+  try {
+    document.querySelector('#info').textContent = game.inningTitle;
+  } catch (e) {
+    //game is probably over
+  }
 }
 
-const updateBatter = (game) => {
-  let team = game.currentTeam;
-  let batter = team.currentBatter;
+const updateBatter = (batter) => {
   document.querySelector('#batter #name').textContent = batter.name;
   document.querySelector('#batter #stat').textContent = batter.stats;
   document.querySelector('#batter #bats').textContent = batter.atBats.join(", ");
 }
+
 window.addEventListener('inningChange', () => {
   let keyFrame = {
     transform: ["scale(1)", "scale(3)", "scale(1)"],
@@ -112,7 +117,10 @@ const loadPlayerList = (players, id) => {
   }
 }
 
-const updateRollResult = (roll, outcome, roller) => {
+const updateRollResult = (roll, outcome, roller, batter) => {
+  if (outcome === 'HR') {
+    Organ.charge();
+  }
   let div = document.querySelector('div#roll-result');
   roll.forEach((number, i) => {
     let text = String.fromCharCode(Die.faces[number]);
@@ -128,7 +136,7 @@ const updateRollResult = (roll, outcome, roller) => {
   });
   animation.onfinish = () => {
     roller.disabled = false;
-    // updateBatter(game);
+    updateBatter(batter);
   };
 }
 
@@ -202,15 +210,10 @@ document.addEventListener('DOMContentLoaded', async (e) => {
   roller.addEventListener('click', async (e) => {
     roller.disabled = true;
     let response = await sendMessage({url: `/games/roll`, method: 'post'})
-    let { roll, outcome, playersOnBase } = response.result
-    updateRollResult(roll, outcome, roller);
+    let { roll, outcome, playersOnBase, batter, scoreBoard } = response.result
+    updateRollResult(roll, outcome, roller, batter);
     updateField(playersOnBase);
-    // updateScoreboard(game);
-    try {
-      document.querySelector('#info').textContent = game.inningTitle;
-    } catch (e) {
-      //game is probably over
-    }
+    updateScoreboard(scoreBoard);
   })
 
   //ios homescreen check

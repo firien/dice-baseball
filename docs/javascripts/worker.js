@@ -100,9 +100,6 @@ const newGame = async (data, params) => {
 }
 
 const roll = async (data, params) => {
-  // roll & quickly send out result as an event
-  // this event will trigger pop up animation on main thread
-  // just like a roll from a peer would
   let roll = currentGame.roll();
   let outcome = currentGame.bat(roll);
   let playersOnBase = new Array(3);
@@ -111,7 +108,24 @@ const roll = async (data, params) => {
       playersOnBase[player.base-1] = player;
     }
   }
-  let result = { roll, outcome, playersOnBase };
+  let result = {
+    roll,
+    outcome,
+    playersOnBase,
+    batter: currentGame.currentTeam.currentBatter,
+    scoreBoard: {
+      homeTeam: {
+        totalRuns: currentGame.homeTeam.totalRuns,
+        totalHits: currentGame.homeTeam.totalHits,
+      },
+      awayTeam: {
+        totalRuns: currentGame.awayTeam.totalRuns,
+        totalHits: currentGame.awayTeam.totalHits,
+      },
+      topOfInning: currentGame.topOfInning
+    }
+  };
+  // TODO: commit to database
   postMessage({promiseId: data.promiseId, result, status: 201})
 }
 

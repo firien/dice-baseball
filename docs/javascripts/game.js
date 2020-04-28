@@ -1,7 +1,5 @@
 import Die from './die.js';
-import Team from './team.js';
 import Inning from './inning.js';
-import Organ from './organ.js';
 
 const results = [
   'HBP',//3
@@ -68,6 +66,7 @@ class Game {
   get currentInning() {
     return this.innings[this._currentInning];
   }
+
   bat(dice) {
     let team = this.currentTeam;
     let nextBatter = team.onDeck(); 
@@ -93,7 +92,6 @@ class Game {
         advance = 3;
         break;
       case 'HR':
-        Organ.charge();
         advance = 4;
         break;
       case 'SAC':

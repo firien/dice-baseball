@@ -347,8 +347,8 @@ button#roll {
 
 #runners > span {
   position: absolute;
-  background-color: white;
-  border: thin black solid;
+  background-color: var(--background-color);
+  border: thin var(--text-color) solid;
   padding: 0.2em;
   border-radius: 0.2em;
 }

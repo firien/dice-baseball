@@ -1,4 +1,4 @@
-const tag = 1;
+const tag = 2;
 const prefix = 'DICEBB';
 const cacheName = `${prefix}-${tag}`
 
